@@ -27,9 +27,9 @@ export default async function Home() {
   }
 
   return (
-    <main className="bg-white overflow-x-hidden">
-      {/* ============ بخش ۱: Hero مشکی ============ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-24">
+    <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans">
+      {/* ============ بخش ۱: Hero مشکی (دست نخورده طبق سورس شما) ============ */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-24 bg-black">
         <video
           autoPlay
           loop
@@ -61,7 +61,7 @@ export default async function Home() {
           <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6 text-white/50">
             <div className="w-8 md:w-12 h-px bg-white/30" />
             <span
-              className="text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] uppercase"
+              className="text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] uppercase font-mono"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               از ۱۴۰۳
@@ -92,7 +92,7 @@ export default async function Home() {
 
         <div className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 md:gap-3 text-white/60">
           <span
-            className="text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase"
+            className="text-[10px] tracking-[0.3em] md:tracking-[0.4em] uppercase font-mono"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             Scroll
@@ -112,25 +112,78 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۲: گالری ایونت‌ها (سفید) ============ */}
+      {/* ============ بخش ۲: گالری ایونت‌ها (سبک نئوبروتال و ادیتوریال) ============ */}
       {eventImages.length > 0 && (
-        <section className="bg-white py-12 md:py-16 border-t border-black/10">
-          <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-            <Carousel slidesPerView={{ sm: 1, md: 2, lg: 3 }} gap="1rem" loop>
-              {eventImages.map((img) => (
-                <div
-                  key={img.id}
-                  className="relative aspect-[4/3] overflow-hidden bg-neutral-100"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={img.image_url}
-                    alt={img.alt || ""}
-                    className="w-full h-full object-cover"
-                  />
+        <section className="border-y-2 border-black bg-white" dir="rtl">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            
+            {/* سایدبار لیبل / عنوان آوانگارد */}
+            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-[#ededed] flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between font-mono text-xs font-black uppercase tracking-widest text-neutral-500 mb-6 border-b border-black/20 pb-3">
+                  <span>[ ARCHIVE // 01 ]</span>
+                  <span>MEETUPS & TALKS</span>
                 </div>
-              ))}
-            </Carousel>
+                
+                <h2
+                  className="text-5xl md:text-7xl font-black leading-[0.9] text-black tracking-tighter uppercase"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  EVENTS<br />
+                  <span
+                    className="text-3xl md:text-5xl font-black tracking-normal mt-2 block"
+                    style={{ fontFamily: "var(--font-doran)" }}
+                  >
+                    رویدادهـــا❋
+                  </span>
+                </h2>
+
+                <p
+                  className="mt-6 text-sm md:text-base leading-relaxed text-neutral-700 border-r-2 border-black pr-3"
+                  style={{ fontFamily: "var(--font-doran)" }}
+                >
+                  دورهمی‌های بدون تعارف، انتقال تجربه‌های واقعی و شبکه‌سازی خارج از سالن‌های خشک همایش.
+                </p>
+              </div>
+
+              <div className="mt-8 pt-6 border-t-2 border-black flex items-center justify-between font-mono text-xs font-bold">
+                <span className="bg-[#c8ff00] text-black px-2 py-0.5 border border-black">
+                  ROOM FULL OF BUILDERS
+                </span>
+                <span>TEH // 2025'</span>
+              </div>
+            </div>
+
+            {/* بخش اسلایدر و کارت‌های عکس ایونت */}
+            <div className="lg:col-span-8 p-6 md:p-10 bg-[#fafafa] flex items-center">
+              <div className="w-full">
+                <Carousel slidesPerView={{ sm: 1, md: 2, lg: 3 }} gap="1.5rem" loop>
+                  {eventImages.map((img, i) => (
+                    <div
+                      key={img.id}
+                      className="group border-2 border-black bg-white p-2.5 transition-all duration-200 hover:-translate-y-1.5 hover:shadow-[6px_6px_0px_#000]"
+                    >
+                      <div className="relative aspect-[4/3] overflow-hidden bg-black border border-black/30">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.image_url}
+                          alt={img.alt || ""}
+                          className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
+                        />
+                        <div className="absolute top-2 right-2 bg-black text-white font-mono text-[10px] font-bold px-2 py-0.5 border border-white/20">
+                          #{String(i + 1).padStart(2, "0")}
+                        </div>
+                      </div>
+                      <div className="mt-2.5 pt-2 border-t border-black/20 flex justify-between items-center text-[10px] font-mono font-bold uppercase">
+                        <span className="truncate max-w-[120px]">{img.alt || "COMMUNITY SESSION"}</span>
+                        <span className="text-[#000] underline decoration-2">VIEW ❋</span>
+                      </div>
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
+            </div>
+
           </div>
         </section>
       )}
@@ -138,19 +191,20 @@ export default async function Home() {
       {/* ============ بخش ۳: دوره‌ها + محصولات (سفید) ============ */}
       <section className="bg-white text-black" dir="rtl">
         {/* نوار بالای بخش */}
-        <div className="border-b border-black/15">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3 flex items-center justify-between text-[10px] md:text-xs">
-            <span className="font-mono tracking-widest uppercase text-black/60">
-              Puzzle / Courses & Products / 2024
+        <div className="border-b-2 border-black bg-[#f2f2f2]">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between text-xs font-mono font-bold uppercase">
+            <span className="tracking-widest flex items-center gap-2">
+              <span className="w-2 h-2 bg-black inline-block" />
+              Puzzle / Courses & Products / 2025'
             </span>
-            <span className="font-mono tracking-widest uppercase text-black/60">
-              Issue No. 02
+            <span className="tracking-widest">
+              Issue No. 02 ❋
             </span>
           </div>
         </div>
 
         {items.map((item, index) => (
-          <div key={`${item.type}-${index}`} className="border-b border-black/15">
+          <div key={`${item.type}-${index}`} className="border-b-2 border-black">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
               {item.type === "course" ? (
                 <CourseItem course={item.data} />
@@ -162,40 +216,40 @@ export default async function Home() {
         ))}
 
         {/* بخش پایانی */}
-        <div className="border-t border-black/15">
+        <div className="border-b-2 border-black bg-[#fafafa]">
           <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-16 flex items-center justify-between gap-6 flex-wrap">
             <h3
-              className="text-3xl md:text-5xl font-black"
+              className="text-4xl md:text-6xl font-black tracking-tight"
               style={{ fontFamily: "var(--font-doran)" }}
             >
-              بیشتر بگردی؟
+              بیشتـــر بگـــردی؟❋
             </h3>
             <div className="flex gap-4 flex-wrap">
               <a
                 href="/courses"
-                className="group inline-flex items-center gap-3 border border-black hover:bg-black hover:text-white px-6 md:px-8 py-3 md:py-4 transition-colors"
+                className="group inline-flex items-center gap-4 border-2 border-black bg-white hover:bg-black hover:text-white px-6 md:px-8 py-3.5 md:py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
               >
                 <span
                   className="text-sm md:text-base font-bold"
                   style={{ fontFamily: "var(--font-doran)" }}
                 >
-                  همه دوره‌ها
+                  همـــه دوره‌هـــا
                 </span>
-                <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs group-hover:bg-white transition-colors">
+                <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs font-bold group-hover:bg-white transition-colors">
                   ←
                 </span>
               </a>
               <a
                 href="/store"
-                className="group inline-flex items-center gap-3 border border-black hover:bg-black hover:text-white px-6 md:px-8 py-3 md:py-4 transition-colors"
+                className="group inline-flex items-center gap-4 border-2 border-black bg-white hover:bg-black hover:text-white px-6 md:px-8 py-3.5 md:py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
               >
                 <span
                   className="text-sm md:text-base font-bold"
                   style={{ fontFamily: "var(--font-doran)" }}
                 >
-                  همه محصولات
+                  همـــه محصولـــات
                 </span>
-                <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs group-hover:bg-white transition-colors">
+                <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs font-bold group-hover:bg-white transition-colors">
                   ←
                 </span>
               </a>
@@ -204,31 +258,83 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۴: گالری کتاب‌ها (سفید) ============ */}
+      {/* ============ بخش ۴: گالری کتاب‌ها (سبک نئوبروتال و ادیتوریال) ============ */}
       {bookImages.length > 0 && (
-        <section className="bg-white py-12 md:py-16 border-t border-black/10">
-          <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-            <Carousel slidesPerView={{ sm: 2, md: 3, lg: 5 }} gap="1rem" loop>
-              {bookImages.map((img) => (
-                <div
-                  key={img.id}
-                  className="relative aspect-[3/4] overflow-hidden bg-white border border-black/10"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={img.image_url}
-                    alt={img.alt || ""}
-                    className="w-full h-full object-cover"
-                  />
+        <section className="border-b-2 border-black bg-[#ededed]" dir="rtl">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            
+            {/* سایدبار عنوان کتابخانه */}
+            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-white flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between font-mono text-xs font-black uppercase tracking-widest text-neutral-500 mb-6 border-b border-black/20 pb-3">
+                  <span>[ LIBRARY // 02 ]</span>
+                  <span>CURATED READINGS</span>
                 </div>
-              ))}
-            </Carousel>
+
+                <h2
+                  className="text-5xl md:text-7xl font-black leading-[0.9] text-black tracking-tighter uppercase"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  BOOKS<br />
+                  <span
+                    className="text-3xl md:text-5xl font-black tracking-normal mt-2 block"
+                    style={{ fontFamily: "var(--font-doran)" }}
+                  >
+                    کتاب‌خـــانه❋
+                  </span>
+                </h2>
+
+                <p
+                  className="mt-6 text-sm md:text-base leading-relaxed text-neutral-700 border-r-2 border-black pr-3"
+                  style={{ fontFamily: "var(--font-doran)" }}
+                >
+                  سرفصل‌های منتخب، کتاب‌های بنیادی مدیریت محصول و رساله‌های مدرن دیزاین و استراتژی.
+                </p>
+              </div>
+
+              <div className="mt-8 pt-6 border-t-2 border-black font-mono text-xs font-bold flex justify-between items-center text-neutral-500">
+                <span>HANDPICKED TITLES</span>
+                <span className="bg-black text-white px-2 py-0.5">READ & GROW</span>
+              </div>
+            </div>
+
+            {/* کارت‌های شیک و خام کتاب‌ها */}
+            <div className="lg:col-span-8 p-6 md:p-10 bg-[#f7f7f7] flex items-center">
+              <div className="w-full">
+                <Carousel slidesPerView={{ sm: 2, md: 3, lg: 5 }} gap="1.25rem" loop>
+                  {bookImages.map((img, i) => (
+                    <div
+                      key={img.id}
+                      className="group border-2 border-black bg-white p-2 transition-all duration-200 hover:-translate-y-2 hover:shadow-[5px_5px_0px_#000]"
+                    >
+                      <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900 border border-black/40">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.image_url}
+                          alt={img.alt || ""}
+                          className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
+                        />
+                        <div className="absolute top-1.5 left-1.5 bg-[#c8ff00] text-black font-mono text-[9px] font-black px-1.5 py-0.5 border border-black">
+                          BK-{String(i + 1).padStart(2, "0")}
+                        </div>
+                      </div>
+                      <div className="mt-2 text-center">
+                        <span className="font-mono text-[10px] font-black uppercase text-neutral-600 block truncate">
+                          {img.alt || `ARCHIVE VOL. ${i + 1}`}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
+            </div>
+
           </div>
         </section>
       )}
 
       {/* ============ بخش ۵: حامیان ما (سفید) ============ */}
-      <section className="bg-white relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden border-t border-black/10">
+      <section className="bg-white relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden border-b-2 border-black">
         <div
           className="absolute top-0 left-0 text-black/[0.03] font-black text-[30vw] md:text-[22vw] leading-none pointer-events-none select-none"
           style={{ fontFamily: "var(--font-doran)" }}
@@ -287,16 +393,16 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end mb-12 md:mb-16">
         <div className="md:col-span-4">
-          <div className="relative aspect-[4/5] overflow-hidden bg-black">
+          <div className="relative aspect-[4/5] overflow-hidden bg-black border-2 border-black shadow-[5px_5px_0px_#000]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={course.image}
               alt={course.titleFa}
-              className="w-full h-full object-cover grayscale contrast-125"
+              className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-300"
             />
-            <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black">
+            <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black border border-black">
               <span className="w-1.5 h-1.5 bg-black rounded-full" />
-              <span className="text-[10px] font-mono tracking-widest uppercase">
+              <span className="text-[10px] font-mono tracking-widest uppercase font-bold">
                 دوره — {course.tag}
               </span>
             </div>
@@ -312,7 +418,7 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
               {course.number}
             </span>
             <h3
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.85] text-black/10 whitespace-nowrap"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.85] text-black/10 whitespace-nowrap uppercase"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {course.titleEn}
@@ -327,24 +433,25 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
         </div>
       </div>
 
-      <div className="h-px bg-black/20 mb-12 md:mb-16" />
+      <div className="h-0.5 bg-black mb-12 md:mb-16" />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
         <div className="md:col-span-7">
-          <div className="text-[10px] tracking-widest uppercase text-black/40 mb-4 font-mono">
+          <div className="text-[10px] tracking-widest uppercase text-black font-mono font-bold mb-4 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-black inline-block" />
             درباره دوره
           </div>
           <p
-            className="text-base md:text-lg leading-loose text-black/75"
+            className="text-base md:text-lg leading-loose text-neutral-800"
             style={{ fontFamily: "var(--font-doran)" }}
           >
             {course.desc}
           </p>
         </div>
 
-        <div className="md:col-span-5 md:border-r md:border-black/15 md:pr-8">
-          <div className="flex items-center justify-between py-4 border-b border-black/10">
-            <span className="text-[10px] tracking-widest uppercase text-black/40 font-mono">
+        <div className="md:col-span-5 md:border-r-2 md:border-black md:pr-8">
+          <div className="flex items-center justify-between py-4 border-b border-black/20">
+            <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-mono font-bold">
               استاد
             </span>
             <span
@@ -355,30 +462,30 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-4 border-b border-black/10">
-            <span className="text-[10px] tracking-widest uppercase text-black/40 font-mono">
+          <div className="flex items-center justify-between py-4 border-b border-black/20">
+            <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-mono font-bold">
               هزینه
             </span>
             <span
               className="text-base md:text-lg font-bold"
               style={{ fontFamily: "var(--font-doran)" }}
             >
-              {course.price} <span className="text-xs text-black/40">تومان</span>
+              {course.price} <span className="text-xs text-neutral-500">تومان</span>
             </span>
           </div>
 
           <div className="pt-6">
             <a
               href="/courses"
-              className="group flex items-center justify-between w-full bg-black text-white hover:bg-black/80 px-6 py-4 transition-colors"
+              className="group flex items-center justify-between w-full border-2 border-black bg-black text-white hover:bg-[#c8ff00] hover:text-black px-6 py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
             >
               <span
                 className="text-sm md:text-base font-bold"
                 style={{ fontFamily: "var(--font-doran)" }}
               >
-                ثبت‌نام در دوره
+                ثبت‌نام در دوره ❋
               </span>
-              <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs group-hover:translate-x-[-4px] transition-transform">
+              <span className="font-mono font-bold text-lg">
                 ←
               </span>
             </a>
@@ -389,6 +496,7 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
   );
 }
 
+// ============ کامپوننت محصول ============
 function ProductItem({
   product,
   index,
@@ -413,22 +521,22 @@ function ProductItem({
         }`}
       >
         <div className={`md:col-span-4 ${!isEven ? "md:order-2" : ""}`}>
-          <div className="relative aspect-[4/5] overflow-hidden bg-black">
+          <div className="relative aspect-[4/5] overflow-hidden bg-black border-2 border-black shadow-[5px_5px_0px_#000]">
             {product.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={product.image_url}
                 alt={product.name}
-                className="w-full h-full object-cover grayscale contrast-125"
+                className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-300"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white/20 text-xs font-mono">
                 NO IMG
               </div>
             )}
-            <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black">
+            <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black border border-black">
               <span className="w-1.5 h-1.5 bg-black rounded-full" />
-              <span className="text-[10px] font-mono tracking-widest uppercase">
+              <span className="text-[10px] font-mono tracking-widest uppercase font-bold">
                 محصول
               </span>
             </div>
@@ -444,7 +552,7 @@ function ProductItem({
               P{String(index).padStart(2, "0")}
             </span>
             <h3
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.85] text-black/10 whitespace-nowrap"
+              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.85] text-black/10 whitespace-nowrap uppercase"
               style={{ fontFamily: "var(--font-display)" }}
             >
               PRODUCT
@@ -459,15 +567,16 @@ function ProductItem({
         </div>
       </div>
 
-      <div className="h-px bg-black/20 mb-12 md:mb-16" />
+      <div className="h-0.5 bg-black mb-12 md:mb-16" />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
         <div className={`md:col-span-7 ${!isEven ? "md:order-2" : ""}`}>
-          <div className="text-[10px] tracking-widest uppercase text-black/40 mb-4 font-mono">
+          <div className="text-[10px] tracking-widest uppercase text-black font-mono font-bold mb-4 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-black inline-block" />
             درباره محصول
           </div>
           <p
-            className="text-base md:text-lg leading-loose text-black/75"
+            className="text-base md:text-lg leading-loose text-neutral-800"
             style={{ fontFamily: "var(--font-doran)" }}
           >
             {product.description || "توضیحاتی برای این محصول ثبت نشده."}
@@ -475,12 +584,12 @@ function ProductItem({
         </div>
 
         <div
-          className={`md:col-span-5 md:border-r md:border-black/15 md:pr-8 ${
-            !isEven ? "md:order-1 md:border-r-0 md:border-l md:pl-8 md:pr-0" : ""
+          className={`md:col-span-5 md:border-r-2 md:border-black md:pr-8 ${
+            !isEven ? "md:order-1 md:border-r-0 md:border-l-2 md:pl-8 md:pr-0" : ""
           }`}
         >
-          <div className="flex items-center justify-between py-4 border-b border-black/10">
-            <span className="text-[10px] tracking-widest uppercase text-black/40 font-mono">
+          <div className="flex items-center justify-between py-4 border-b border-black/20">
+            <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-mono font-bold">
               قیمت
             </span>
             <span
@@ -488,12 +597,12 @@ function ProductItem({
               style={{ fontFamily: "var(--font-doran)" }}
             >
               {Number(product.price).toLocaleString("fa-IR")}{" "}
-              <span className="text-xs text-black/40">تومان</span>
+              <span className="text-xs text-neutral-500">تومان</span>
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-4 border-b border-black/10">
-            <span className="text-[10px] tracking-widest uppercase text-black/40 font-mono">
+          <div className="flex items-center justify-between py-4 border-b border-black/20">
+            <span className="text-[10px] tracking-widest uppercase text-neutral-500 font-mono font-bold">
               دسته
             </span>
             <span
@@ -507,15 +616,15 @@ function ProductItem({
           <div className="pt-6">
             <a
               href={`/store/${product.id}`}
-              className="group flex items-center justify-between w-full bg-black text-white hover:bg-black/80 px-6 py-4 transition-colors"
+              className="group flex items-center justify-between w-full border-2 border-black bg-black text-white hover:bg-[#c8ff00] hover:text-black px-6 py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
             >
               <span
                 className="text-sm md:text-base font-bold"
                 style={{ fontFamily: "var(--font-doran)" }}
               >
-                مشاهده محصول
+                مشاهده محصول ❋
               </span>
-              <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs group-hover:translate-x-[-4px] transition-transform">
+              <span className="font-mono font-bold text-lg">
                 ←
               </span>
             </a>
