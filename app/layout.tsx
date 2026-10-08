@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Space_Grotesk, Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 
 // فونت Doran برای فارسی
 const doran = localFont({
@@ -57,7 +58,7 @@ export default function RootLayout({
       className={`${doran.variable} ${spaceGrotesk.variable} ${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased`}
     >
       <body className="font-sans bg-black">
-        <Header />
+         <ConditionalHeader />
         {children}
       </body>
     </html>

@@ -1,12 +1,25 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  experimental: {
-    agentFeedback: true,
+  // ============ تنظیمات عکس‌های Supabase ============
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
   },
-  cacheComponents: true,
-  partialPrefetching: true,
+
+  // ============ تنظیمات Server Actions ============
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb", // آپلود عکس تا ۱۰ مگابایت
+    },
+  },
+
+  // ============ Turbopack + Tailwind ============
   turbopack: {
     rules: {
       "*.css": {
