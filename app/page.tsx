@@ -389,7 +389,6 @@ function CourseItem({ course }: { course: (typeof COURSES)[0] }) {
   );
 }
 
-// ============ کامپوننت محصول ============
 function ProductItem({
   product,
   index,
