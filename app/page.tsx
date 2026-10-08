@@ -27,8 +27,9 @@ export default async function Home() {
   }
 
   return (
-    <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans">
-      {/* ============ بخش ۱: Hero مشکی (دست نخورده طبق سورس شما) ============ */}
+    <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans relative">
+      
+      {/* ============ بخش ۱: Hero مشکی (طبق سورس اصلی شما) ============ */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-24 bg-black">
         <video
           autoPlay
@@ -112,13 +113,35 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۲: گالری ایونت‌ها (سبک نئوبروتال و ادیتوریال) ============ */}
+      {/* ============ بخش ۲: گالری ایونت‌ها (با بک‌گراند شلوغ و متن محو) ============ */}
       {eventImages.length > 0 && (
-        <section className="border-y-2 border-black bg-white" dir="rtl">
-          <div className="grid grid-cols-1 lg:grid-cols-12">
-            
-            {/* سایدبار لیبل / عنوان آوانگارد */}
-            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-[#ededed] flex flex-col justify-between">
+        <section className="relative border-y-2 border-black bg-white overflow-hidden" dir="rtl">
+          {/* واترمارک‌های بزرگ و پراکنده پشت ایونت‌ها */}
+          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+            <div
+              className="absolute -top-[10%] -left-[10%] text-black/[0.035] font-black text-[22vw] leading-none whitespace-nowrap uppercase tracking-tighter"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              COMMUNITY EVENTS
+            </div>
+            <div
+              className="absolute bottom-0 right-1/4 text-black/[0.04] font-black text-[14vw] leading-none whitespace-nowrap rotate-[-3deg]"
+              style={{ fontFamily: "var(--font-doran)" }}
+            >
+              شبکه‌سازی دورهمی
+            </div>
+            <div className="absolute top-1/2 -right-8 -translate-y-1/2 rotate-90 text-[11px] font-mono tracking-[0.6em] text-black/20 uppercase whitespace-nowrap">
+              ARCHIVED RECS // TEHRAN CHAPTER // 2024-2025
+            </div>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
+            {/* سایدبار ایونت‌ها */}
+            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-[#ededed]/90 backdrop-blur-sm flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 font-mono text-[80px] font-black text-black/[0.03] select-none pointer-events-none leading-none">
+                01
+              </div>
+
               <div>
                 <div className="flex items-center justify-between font-mono text-xs font-black uppercase tracking-widest text-neutral-500 mb-6 border-b border-black/20 pb-3">
                   <span>[ ARCHIVE // 01 ]</span>
@@ -154,8 +177,8 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* بخش اسلایدر و کارت‌های عکس ایونت */}
-            <div className="lg:col-span-8 p-6 md:p-10 bg-[#fafafa] flex items-center">
+            {/* گالری اسلایدر ایونت‌ها */}
+            <div className="lg:col-span-8 p-6 md:p-10 bg-transparent flex items-center relative">
               <div className="w-full">
                 <Carousel slidesPerView={{ sm: 1, md: 2, lg: 3 }} gap="1.5rem" loop>
                   {eventImages.map((img, i) => (
@@ -188,8 +211,8 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ============ بخش ۳: دوره‌ها + محصولات (سفید) ============ */}
-      <section className="bg-white text-black" dir="rtl">
+      {/* ============ بخش ۳: دوره‌ها + محصولات (با متون غول‌پیکر پس‌زمینه) ============ */}
+      <section className="bg-white text-black relative overflow-hidden" dir="rtl">
         {/* نوار بالای بخش */}
         <div className="border-b-2 border-black bg-[#f2f2f2]">
           <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between text-xs font-mono font-bold uppercase">
@@ -204,8 +227,27 @@ export default async function Home() {
         </div>
 
         {items.map((item, index) => (
-          <div key={`${item.type}-${index}`} className="border-b-2 border-black">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
+          <div key={`${item.type}-${index}`} className="border-b-2 border-black relative overflow-hidden">
+            {/* متن کم‌رنگ بزرگ در بک‌گراند هر ردیف دوره یا محصول */}
+            <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+              <div
+                className={`absolute ${index % 2 === 0 ? "-top-[15%] -right-[5%]" : "-bottom-[15%] -left-[5%]"} text-black/[0.03] font-black text-[18vw] leading-none whitespace-nowrap uppercase`}
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                {item.type === "course" ? "MASTERCLASS" : "ARTIFACT"}
+              </div>
+              <div
+                className={`absolute ${index % 2 === 0 ? "bottom-4 left-10" : "top-4 right-10"} text-black/[0.025] font-black text-[10vw] leading-none whitespace-nowrap`}
+                style={{ fontFamily: "var(--font-doran)" }}
+              >
+                {item.type === "course" ? "آموزش تخصصی" : "محصول اختصاصی"}
+              </div>
+              <div className="absolute top-1/3 left-4 -translate-y-1/2 -rotate-90 text-[10px] font-mono tracking-[0.4em] text-black/15 uppercase">
+                SPEC: NO. 0{index + 1} // VERIFIED
+              </div>
+            </div>
+
+            <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24 relative z-10">
               {item.type === "course" ? (
                 <CourseItem course={item.data} />
               ) : (
@@ -215,9 +257,18 @@ export default async function Home() {
           </div>
         ))}
 
-        {/* بخش پایانی */}
-        <div className="border-b-2 border-black bg-[#fafafa]">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-16 flex items-center justify-between gap-6 flex-wrap">
+        {/* بخش پایانی با تایپوگرافی بک‌گراند */}
+        <div className="border-b-2 border-black bg-[#fafafa] relative overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
+            <span
+              className="text-black/[0.03] font-black text-[22vw] leading-none uppercase whitespace-nowrap"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              EXPLORE MORE
+            </span>
+          </div>
+
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-16 flex items-center justify-between gap-6 flex-wrap relative z-10">
             <h3
               className="text-4xl md:text-6xl font-black tracking-tight"
               style={{ fontFamily: "var(--font-doran)" }}
@@ -258,13 +309,36 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۴: گالری کتاب‌ها (سبک نئوبروتال و ادیتوریال) ============ */}
+      {/* ============ بخش ۴: گالری کتاب‌ها (با پس‌زمینه لایه‌ای متنی) ============ */}
       {bookImages.length > 0 && (
-        <section className="border-b-2 border-black bg-[#ededed]" dir="rtl">
-          <div className="grid grid-cols-1 lg:grid-cols-12">
+        <section className="border-b-2 border-black bg-[#ededed] relative overflow-hidden" dir="rtl">
+          {/* متن‌های کم‌رنگ بزرگ پشت قفسه کتاب‌ها */}
+          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+            <div
+              className="absolute -bottom-[12%] -left-[5%] text-black/[0.04] font-black text-[20vw] leading-none whitespace-nowrap uppercase tracking-tighter"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              READING GUILD
+            </div>
+            <div
+              className="absolute top-4 right-1/3 text-black/[0.035] font-black text-[15vw] leading-none whitespace-nowrap"
+              style={{ fontFamily: "var(--font-doran)" }}
+            >
+              کتاب‌خانه پازل
+            </div>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-mono tracking-[0.5em] text-black/15 uppercase whitespace-nowrap">
+              ESSENTIAL THINKING // PRODUCT // DESIGN // STRATEGY
+            </div>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
             
-            {/* سایدبار عنوان کتابخانه */}
-            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-white flex flex-col justify-between">
+            {/* سایدبار کتاب‌ها */}
+            <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-white/95 backdrop-blur-sm flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 font-mono text-[80px] font-black text-black/[0.03] select-none pointer-events-none leading-none">
+                02
+              </div>
+
               <div>
                 <div className="flex items-center justify-between font-mono text-xs font-black uppercase tracking-widest text-neutral-500 mb-6 border-b border-black/20 pb-3">
                   <span>[ LIBRARY // 02 ]</span>
@@ -298,8 +372,8 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* کارت‌های شیک و خام کتاب‌ها */}
-            <div className="lg:col-span-8 p-6 md:p-10 bg-[#f7f7f7] flex items-center">
+            {/* کارت‌های کتاب‌ها */}
+            <div className="lg:col-span-8 p-6 md:p-10 bg-transparent flex items-center relative">
               <div className="w-full">
                 <Carousel slidesPerView={{ sm: 2, md: 3, lg: 5 }} gap="1.25rem" loop>
                   {bookImages.map((img, i) => (
@@ -333,22 +407,30 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ============ بخش ۵: حامیان ما (سفید) ============ */}
+      {/* ============ بخش ۵: حامیان ما (با حروف پس‌زمینه) ============ */}
       <section className="bg-white relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden border-b-2 border-black">
-        <div
-          className="absolute top-0 left-0 text-black/[0.03] font-black text-[30vw] md:text-[22vw] leading-none pointer-events-none select-none"
-          style={{ fontFamily: "var(--font-doran)" }}
-        >
-          حامیان
+        {/* پس‌زمینه‌های تایپوگرافی شلوغ */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
+          <div
+            className="absolute top-0 -left-[5%] text-black/[0.03] font-black text-[28vw] md:text-[22vw] leading-none whitespace-nowrap uppercase"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            PARTNERS
+          </div>
+          <div
+            className="absolute -bottom-8 -right-8 text-black/[0.03] font-black text-[18vw] leading-none whitespace-nowrap"
+            style={{ fontFamily: "var(--font-doran)" }}
+          >
+            اسپانسرها
+          </div>
         </div>
 
         <div className="w-full max-w-7xl mx-auto relative z-10">
           <div className="mb-12 md:mb-20 lg:mb-28 relative" dir="rtl">
             <p
-              className="text-xs md:text-sm lg:text-base tracking-[0.3em] md:tracking-[0.4em] uppercase text-neutral-400 mb-4 md:mb-6"
-              style={{ fontFamily: "var(--font-mono)" }}
+              className="text-xs md:text-sm lg:text-base tracking-[0.3em] md:tracking-[0.4em] uppercase text-neutral-400 mb-4 md:mb-6 font-mono"
             >
-              05 — Our Partners
+              05 — Our Partners ❋
             </p>
             <h2
               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-black leading-[1]"
@@ -365,12 +447,17 @@ export default async function Home() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="group relative aspect-[4/3] rounded-2xl md:rounded-3xl border-2 border-neutral-200 bg-neutral-50 flex items-center justify-center hover:border-black hover:bg-white transition-all duration-500 overflow-hidden hover:shadow-2xl"
+                className="group relative aspect-[4/3] border-2 border-black bg-white flex items-center justify-center transition-all duration-300 hover:shadow-[8px_8px_0px_#000] hover:-translate-y-1 overflow-hidden"
                 style={{ transform: `rotate(${(i - 2) * 1.5}deg)` }}
               >
+                <div className="absolute top-2 left-2 font-mono text-[10px] font-black bg-black text-white px-2 py-0.5">
+                  TIER // 0{i}
+                </div>
                 <div className="text-center p-4">
-                  <div className="w-20 h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 rounded-2xl md:rounded-3xl bg-neutral-200 mx-auto mb-4 md:mb-6 group-hover:bg-black group-hover:scale-110 group-hover:rotate-6 transition-all duration-500" />
-                  <div className="text-base md:text-lg lg:text-2xl font-bold text-neutral-300 group-hover:text-black transition-colors duration-300">
+                  <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 border-2 border-black bg-neutral-100 mx-auto mb-4 md:mb-6 group-hover:bg-[#c8ff00] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 flex items-center justify-center font-mono font-black text-xl">
+                    LOGO
+                  </div>
+                  <div className="text-base md:text-lg lg:text-2xl font-black text-black transition-colors duration-300">
                     {i === 1
                       ? "اسپانسر اول"
                       : i === 2
