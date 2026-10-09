@@ -2,6 +2,7 @@ import { ChevronDown, ArrowUpRight, Asterisk } from "lucide-react";
 import { getProducts, COURSES } from "@/lib/data";
 import { Carousel } from "@/components/Carousel";
 import { createClient } from "@/lib/supabase/server";
+import Footer from "@/components/Footer";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -718,6 +719,7 @@ function ProductItem({
           </div>
         </div>
       </div>
+      
     </>
   );
 }
