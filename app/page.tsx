@@ -3,6 +3,7 @@ import { getProducts, COURSES } from "@/lib/data";
 import { Carousel } from "@/components/Carousel";
 import { createClient } from "@/lib/supabase/server";
 import Footer from "@/components/Footer";
+import FAQ from "@/components/FAQ";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -30,7 +31,7 @@ export default async function Home() {
   return (
     <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans relative">
       
-      {/* ============ بخش ۱: Hero مشکی (طبق سورس اصلی شما) ============ */}
+      {/* ============ بخش ۱: Hero مشکی ============ */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-24 bg-black">
         <video
           autoPlay
@@ -114,10 +115,9 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۲: گالری ایونت‌ها (با بک‌گراند شلوغ و متن محو) ============ */}
+      {/* ============ بخش ۲: گالری ایونت‌ها ============ */}
       {eventImages.length > 0 && (
         <section className="relative border-y-2 border-black bg-white overflow-hidden" dir="rtl">
-          {/* واترمارک‌های بزرگ و پراکنده پشت ایونت‌ها */}
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
             <div
               className="absolute -top-[10%] -left-[10%] text-black/[0.035] font-black text-[22vw] leading-none whitespace-nowrap uppercase tracking-tighter"
@@ -212,9 +212,8 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ============ بخش ۳: دوره‌ها + محصولات (با متون غول‌پیکر پس‌زمینه) ============ */}
+      {/* ============ بخش ۳: دوره‌ها + محصولات ============ */}
       <section className="bg-white text-black relative overflow-hidden" dir="rtl">
-        {/* نوار بالای بخش */}
         <div className="border-b-2 border-black bg-[#f2f2f2]">
           <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between text-xs font-mono font-bold uppercase">
             <span className="tracking-widest flex items-center gap-2">
@@ -229,7 +228,6 @@ export default async function Home() {
 
         {items.map((item, index) => (
           <div key={`${item.type}-${index}`} className="border-b-2 border-black relative overflow-hidden">
-            {/* متن کم‌رنگ بزرگ در بک‌گراند هر ردیف دوره یا محصول */}
             <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
               <div
                 className={`absolute ${index % 2 === 0 ? "-top-[15%] -right-[5%]" : "-bottom-[15%] -left-[5%]"} text-black/[0.03] font-black text-[18vw] leading-none whitespace-nowrap uppercase`}
@@ -258,7 +256,6 @@ export default async function Home() {
           </div>
         ))}
 
-        {/* بخش پایانی با تایپوگرافی بک‌گراند */}
         <div className="border-b-2 border-black bg-[#fafafa] relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
             <span
@@ -310,10 +307,9 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ============ بخش ۴: گالری کتاب‌ها (با پس‌زمینه لایه‌ای متنی) ============ */}
+      {/* ============ بخش ۴: گالری کتاب‌ها ============ */}
       {bookImages.length > 0 && (
         <section className="border-b-2 border-black bg-[#ededed] relative overflow-hidden" dir="rtl">
-          {/* متن‌های کم‌رنگ بزرگ پشت قفسه کتاب‌ها */}
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
             <div
               className="absolute -bottom-[12%] -left-[5%] text-black/[0.04] font-black text-[20vw] leading-none whitespace-nowrap uppercase tracking-tighter"
@@ -333,8 +329,6 @@ export default async function Home() {
           </div>
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
-            
-            {/* سایدبار کتاب‌ها */}
             <div className="lg:col-span-4 border-b-2 lg:border-b-0 lg:border-l-2 border-black p-6 md:p-10 bg-white/95 backdrop-blur-sm flex flex-col justify-between relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 font-mono text-[80px] font-black text-black/[0.03] select-none pointer-events-none leading-none">
                 02
@@ -373,7 +367,6 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* کارت‌های کتاب‌ها */}
             <div className="lg:col-span-8 p-6 md:p-10 bg-transparent flex items-center relative">
               <div className="w-full">
                 <Carousel slidesPerView={{ sm: 2, md: 3, lg: 5 }} gap="1.25rem" loop>
@@ -403,14 +396,12 @@ export default async function Home() {
                 </Carousel>
               </div>
             </div>
-
           </div>
         </section>
       )}
 
-      {/* ============ بخش ۵: حامیان ما (با حروف پس‌زمینه) ============ */}
+      {/* ============ بخش ۵: حامیان ما ============ */}
       <section className="bg-white relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden border-b-2 border-black">
-        {/* پس‌زمینه‌های تایپوگرافی شلوغ */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
           <div
             className="absolute top-0 -left-[5%] text-black/[0.03] font-black text-[28vw] md:text-[22vw] leading-none whitespace-nowrap uppercase"
@@ -471,6 +462,12 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ============ بخش ۶: سوالات متداول ============ */}
+      <FAQ />
+
+      {/* ============ بخش ۷: Footer ============ */}
+      <Footer />
     </main>
   );
 }
@@ -719,7 +716,6 @@ function ProductItem({
           </div>
         </div>
       </div>
-      
     </>
   );
 }
