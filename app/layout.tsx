@@ -4,7 +4,7 @@ import { Space_Grotesk, Inter, Playfair_Display, JetBrains_Mono } from "next/fon
 import "./globals.css";
 import Header from "@/components/Header";
 import ConditionalHeader from "@/components/ConditionalHeader";
-import Footer from "@/components/Footer";
+import Footer from "@/components/sections/Footer";
 
 
 // فونت Doran برای فارسی

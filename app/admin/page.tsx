@@ -8,7 +8,10 @@ import {
   LogOut,
   Tag,
   Image as ImageIcon,
+  Sparkles,
 } from "lucide-react";
+import { Heart } from "lucide-react";
+import { UserCog } from "lucide-react";
 export default async function AdminDashboard() {
   const supabase = await createClient();
   const {
@@ -42,10 +45,28 @@ export default async function AdminDashboard() {
       icon: MenuIcon,
     },
     {
+  href: "/admin/head-coach",
+  label: "سرمربی باشگاه",
+  desc: "عکس، نام و توضیحات",
+  icon: UserCog,
+},
+    {
   href: "/admin/gallery",
   label: "گالری",
   desc: "کتاب‌ها و ایونت‌ها",
   icon: ImageIcon,
+},
+{
+  href: "/admin/coaching",
+  label: "کوچ اختصاصی",
+  desc: "آپلود عکس و توضیحات",
+  icon: Sparkles,
+},
+{
+  href: "/admin/tribute",
+  label: "ادای دین",
+  desc: "عکس، تیتر و توضیحات",
+  icon: Heart,
 },
     {
       href: "/admin/settings",
