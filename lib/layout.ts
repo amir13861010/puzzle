@@ -6,8 +6,13 @@ export type SectionType =
   | "tribute"
   | "books_gallery"
   | "partners"
-  | "head_coach"     // ← اضافه کن
+  | "head_coach"
   | "faq";
+
+export type LayoutItem = {
+  type: SectionType;
+  source?: number;
+};
 
 export const LAYOUT: LayoutItem[] = [
   { type: "events_gallery" },
@@ -21,6 +26,6 @@ export const LAYOUT: LayoutItem[] = [
   { type: "tribute" },
   { type: "books_gallery" },
   { type: "partners" },
-  { type: "head_coach" },   // ← قبل از faq
+  { type: "head_coach" },
   { type: "faq" },
 ];
