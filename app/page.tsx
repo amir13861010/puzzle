@@ -152,7 +152,6 @@ export default async function Home() {
         }
       })}
 
-      <Footer />
     </main>
   );
 }
