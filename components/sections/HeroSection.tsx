@@ -59,7 +59,7 @@ export default function HeroSection() {
             transform: "rotate(1deg)",
           }}
         >
-          باشگاه مدیران محصول جوان جوان
+          باشگاه مدیران محصول جوان 
         </div>
       </div>
 
