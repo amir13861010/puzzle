@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getProduct, getProducts, getCategories } from "@/lib/data";
 import { ChevronRight } from "lucide-react";
 import ProductActions from "./ProductActions";
 
@@ -12,33 +12,21 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
 
-  const { data: product } = await supabase
-    .from("products")
-    .select("*")
-    .eq("id", id)
-    .single();
-
+  const product = await getProduct(id);
   if (!product) notFound();
 
   // دسته‌بندی
   let categoryName: string | null = null;
   if (product.category) {
-    const { data: category } = await supabase
-      .from("categories")
-      .select("name")
-      .eq("id", product.category)
-      .single();
+    const categories = await getCategories();
+    const category = categories.find((c) => c.id === product.category);
     categoryName = category?.name ?? null;
   }
 
   // محصولات مشابه
-  const { data: related } = await supabase
-    .from("products")
-    .select("*")
-    .neq("id", id)
-    .limit(3);
+  const allProducts = await getProducts();
+  const related = allProducts.filter((p) => p.id !== id).slice(0, 3);
 
   return (
     <main
@@ -73,7 +61,7 @@ export default async function ProductPage({
             </span>
           </nav>
 
-          {/* چیدمان: عکس راست، متن چپ */}
+          {/* چیدمان: عکس چپ، متن راست */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-20 items-start">
             {/* متن — راست */}
             <div className="md:col-span-6 lg:col-span-7 md:order-2">

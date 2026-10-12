@@ -1,16 +1,11 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { getProducts } from "@/lib/data";
 import { ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function StorePage() {
-  const supabase = await createClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-
+  const products = await getProducts();
   const items = products ?? [];
 
   return (

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getSettings as getSettingsFromPayload } from "./data";
 
 export type Settings = {
   telegram: string;
@@ -11,17 +11,10 @@ const DEFAULT_SETTINGS: Settings = {
 };
 
 export async function getSettings(): Promise<Settings> {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("settings")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  if (!data) return DEFAULT_SETTINGS;
-
+  const settings = await getSettingsFromPayload();
+  if (!settings) return DEFAULT_SETTINGS;
   return {
-    telegram: data.telegram || DEFAULT_SETTINGS.telegram,
-    whatsapp: data.whatsapp || DEFAULT_SETTINGS.whatsapp,
+    telegram: settings.telegram || DEFAULT_SETTINGS.telegram,
+    whatsapp: settings.whatsapp || DEFAULT_SETTINGS.whatsapp,
   };
 }

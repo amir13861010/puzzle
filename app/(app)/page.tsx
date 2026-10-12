@@ -1,5 +1,16 @@
-import { createClient } from "@/lib/supabase/server";
-import { getProducts, COURSES, type Course } from "@/lib/data";
+import {
+  getProducts,
+  getCourses,
+  getGallery,
+  getCoaching,
+  getTribute,
+  getHeadCoach,
+  getCoaches,
+  getTestimonials,
+  getPartners,
+  getSectionLayout,
+  type Course,
+} from "@/lib/data";
 import HeroSection from "@/components/sections/HeroSection";
 import EventsGallery from "@/components/sections/EventsGallery";
 import BooksGallery from "@/components/sections/BooksGallery";
@@ -12,59 +23,36 @@ import HeadCoachSection from "@/components/sections/HeadCoachSection";
 import CoachesSection from "@/components/sections/CoachesSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import FAQ from "@/components/sections/FAQ";
-import Footer from "@/components/sections/Footer";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const supabase = await createClient();
-
   const [
-    { data: layout },
-    { data: gallery },
-    { data: coachingItems },
-    { data: tribute },
-    { data: headCoach },
-    { data: coaches },
-    { data: testimonials },
-    { data: partners },
+    layout,
+    gallery,
+    coachingItems,
+    tribute,
+    headCoach,
+    coaches,
+    testimonials,
+    partners,
+    courses,
+    products,
   ] = await Promise.all([
-    supabase
-      .from("section_layout")
-      .select("*")
-      .eq("is_visible", true)
-      .order("sort_order"),
-    supabase
-      .from("gallery")
-      .select("*")
-      .order("sort_order")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("coaching")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    supabase.from("tribute").select("*").eq("id", 1).single(),
-    supabase.from("head_coach").select("*").eq("id", 1).single(),
-    supabase
-      .from("coaches")
-      .select("*")
-      .order("sort_order")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("testimonials")
-      .select("*")
-      .order("sort_order")
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("partners")
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false }),
+    getSectionLayout(),
+    getGallery(),
+    getCoaching(),
+    getTribute(),
+    getHeadCoach(),
+    getCoaches(),
+    getTestimonials(),
+    getPartners(),
+    getCourses(),
+    getProducts(),
   ]);
 
-  const eventImages = (gallery ?? []).filter((g) => g.category === "events");
-  const bookImages = (gallery ?? []).filter((g) => g.category === "books");
-  const products = await getProducts();
+  const eventImages = gallery.filter((g) => g.category === "events");
+  const bookImages = gallery.filter((g) => g.category === "books");
 
   const layoutItems = layout ?? [];
 
@@ -81,7 +69,7 @@ export default async function Home() {
             return <BooksGallery key={item.id} images={bookImages} />;
 
           case "course": {
-            const course: Course | undefined = COURSES[item.source ?? 0];
+            const course: Course | undefined = courses[item.source ?? 0];
             if (!course) return null;
             return (
               <section
@@ -179,7 +167,6 @@ export default async function Home() {
             return null;
         }
       })}
-
     </main>
   );
 }
