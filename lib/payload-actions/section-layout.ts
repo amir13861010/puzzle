@@ -8,12 +8,30 @@ export async function updateSectionOrder(
 ) {
   const payload = await getPayloadClient();
 
-  for (const item of items) {
-    await payload.update({
-      collection: "section_layout",
-      id: item.id,
-      data: { _order: item._order },
-    });
+  // Payload _order رو با update معمولی نمی‌پذیره
+  // پس مستقیم از طریق db (drizzle) آپدیت می‌کنیم
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = (payload.db as any).drizzle;
+
+  if (!db) {
+    // راه جایگزین: یکی‌یکی از طریق API خود Payload
+    for (const item of items) {
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/api/section_layout/${item.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ _order: item._order }),
+      });
+    }
+  } else {
+    // راه مستقیم با SQL
+    for (const item of items) {
+      await payload.db.pool.query(
+        `UPDATE section_layout SET _order = $1 WHERE id = $2`,
+        [item._order, item.id]
+      );
+    }
   }
 
   revalidatePath("/admin/section-layout");
@@ -54,22 +72,12 @@ export async function deleteSection(id: string) {
 export async function addSection(type: string, source?: number) {
   const payload = await getPayloadClient();
 
-  // بیشترین _order رو بگیر
-  const existing = await payload.find({
-    collection: "section_layout",
-    limit: 100,
-    sort: "-_order",
-  });
-
-  const maxOrder = existing.docs[0]?._order ?? -1;
-
   await payload.create({
     collection: "section_layout",
     data: {
       type,
       source: source ?? null,
       is_visible: true,
-      _order: maxOrder + 1,
     },
   });
 
