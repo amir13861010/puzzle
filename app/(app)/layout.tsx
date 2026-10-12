@@ -95,7 +95,7 @@ export const metadata: Metadata = {
     title: "پازل — باشگاه مدیران محصول جوان",
     description:
       "جامعه‌ای غیررسمی، منتقد و رو به رشد برای مدیران محصول، دیزاینرها و سازندگان جسور.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
