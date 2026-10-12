@@ -1,5 +1,5 @@
 type TributeItem = {
-  id: number;
+  id: string;
   image_url: string | null;
   alt: string | null;
   title: string | null;
