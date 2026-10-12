@@ -1,11 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileMenu from "@/components/MobileMenu";
+import { useCart } from "@/lib/cart";
+import CartSheet from "@/components/CartSheet";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const totalItems = useCart((s) => s.totalItems);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const itemCount = mounted ? totalItems() : 0;
 
   return (
     <>
@@ -70,6 +81,7 @@ export default function Header() {
           <button
             type="button"
             aria-label="سبد خرید"
+            onClick={() => setCartOpen(true)}
             className="bg-neutral-100 text-black px-3 md:px-6 flex items-center gap-2 hover:bg-black hover:text-white transition-colors relative shrink-0"
           >
             <svg
@@ -91,9 +103,11 @@ export default function Header() {
             <span className="hidden md:inline text-sm font-bold uppercase tracking-wide">
               سبد
             </span>
-            <span className="absolute top-1 right-1 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-black text-white text-[9px] md:text-[10px] font-bold flex items-center justify-center rounded-full">
-              0
-            </span>
+            {itemCount > 0 && (
+              <span className="absolute top-1 right-1 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-[#c8ff00] text-black text-[9px] md:text-[10px] font-bold flex items-center justify-center rounded-full border border-black">
+                {itemCount.toLocaleString("fa-IR")}
+              </span>
+            )}
           </button>
 
           {/* بلوک ۵: شبکه‌های اجتماعی */}
@@ -179,6 +193,9 @@ export default function Header() {
 
       {/* منوی موبایل */}
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+
+      {/* Sheet سبد خرید */}
+      <CartSheet open={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 }
