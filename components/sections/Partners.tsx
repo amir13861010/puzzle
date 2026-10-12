@@ -1,63 +1,104 @@
+const TIERS = [
+  {
+    label: "اسپانسر پلاتینیوم",
+    sublabel: "PLATINUM SPONSOR",
+    sponsors: [
+      { name: "HAMERZ", logo: null },
+    ],
+  },
+  {
+    label: "اسپانسر طلایی",
+    sublabel: "GOLD SPONSOR",
+    sponsors: [
+      { name: "SPONSOR 02", logo: null },
+    ],
+  },
+  {
+    label: "اسپانسر نقره‌ای",
+    sublabel: "SILVER SPONSOR",
+    sponsors: [
+      { name: "SPONSOR 03", logo: null },
+    ],
+  },
+];
+
 export default function Partners() {
   return (
-    <section className="bg-white relative py-16 md:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden border-b-2 border-black">
-      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        <div
-          className="absolute top-0 -left-[5%] text-black/[0.03] font-black text-[28vw] md:text-[22vw] leading-none whitespace-nowrap uppercase"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          PARTNERS
-        </div>
-        <div
-          className="absolute -bottom-8 -right-8 text-black/[0.03] font-black text-[18vw] leading-none whitespace-nowrap"
-          style={{ fontFamily: "var(--font-doran)" }}
-        >
-          اسپانسرها
-        </div>
-      </div>
-
-      <div className="w-full max-w-7xl mx-auto relative z-10">
-        <div className="mb-12 md:mb-20 lg:mb-28 relative" dir="rtl">
-          <p
-            className="text-xs md:text-sm lg:text-base tracking-[0.3em] md:tracking-[0.4em] uppercase text-neutral-400 mb-4 md:mb-6 font-mono"
-          >
-            05 — Our Partners ❋
-          </p>
+    <section
+      className="bg-[#fafafa] text-black relative overflow-hidden border-b-2 border-black"
+      dir="rtl"
+    >
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        {/* تیتر SPONSOR */}
+        <div className="pt-16 md:pt-24 pb-8 md:pb-12 border-b-2 border-black">
           <h2
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-black leading-[1]"
-            style={{
-              fontFamily: "var(--font-doran)",
-              transform: "rotate(-1deg)",
-            }}
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-black leading-[0.85] tracking-tighter uppercase"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            حامیان ما
+            SPONSOR
           </h2>
+          <p
+            className="mt-4 md:mt-6 text-sm md:text-base text-neutral-500 font-mono tracking-widest uppercase"
+          >
+            OUR PARTNERS / 2025
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 lg:gap-16 items-center">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="group relative aspect-[4/3] border-2 border-black bg-white flex items-center justify-center transition-all duration-300 hover:shadow-[8px_8px_0px_#000] hover:-translate-y-1 overflow-hidden"
-              style={{ transform: `rotate(${(i - 2) * 1.5}deg)` }}
-            >
-              <div className="absolute top-2 left-2 font-mono text-[10px] font-black bg-black text-white px-2 py-0.5">
-                TIER // 0{i}
-              </div>
-              <div className="text-center p-4">
-                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 border-2 border-black bg-neutral-100 mx-auto mb-4 md:mb-6 group-hover:bg-[#c8ff00] group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 flex items-center justify-center font-mono font-black text-xl">
-                  LOGO
-                </div>
-                <div className="text-base md:text-lg lg:text-2xl font-black text-black transition-colors duration-300">
-                  {i === 1
-                    ? "اسپانسر اول"
-                    : i === 2
-                    ? "اسپانسر دوم"
-                    : "اسپانسر سوم"}
-                </div>
+        {/* ردیف‌های tier */}
+        {TIERS.map((tier, tierIndex) => (
+          <div key={tier.label}>
+            {/* لیبل tier */}
+            <div className="py-5 md:py-7 border-b border-black/30">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <h3
+                  className="text-xl md:text-3xl font-black text-black"
+                  style={{ fontFamily: "var(--font-doran)" }}
+                >
+                  {tier.label}
+                </h3>
+                <span className="font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase text-neutral-400">
+                  {tier.sublabel}
+                </span>
               </div>
             </div>
-          ))}
+
+            {/* محتوای sponsors — وسط */}
+            <div className="py-16 md:py-24 border-b-2 border-black flex items-center justify-center">
+              {tier.sponsors.length === 1 ? (
+                <div className="text-center">
+                  <div
+                    className="text-4xl md:text-6xl lg:text-7xl font-black text-black tracking-tighter"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    {tier.sponsors[0].name}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 md:gap-20 items-center justify-items-center w-full">
+                  {tier.sponsors.map((s) => (
+                    <div
+                      key={s.name}
+                      className="text-2xl md:text-4xl font-black text-black tracking-tight"
+                      style={{ fontFamily: "var(--font-display)" }}
+                    >
+                      {s.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+
+        {/* متن پایانی */}
+        <div className="py-8 md:py-12 border-b-2 border-black">
+          <p
+            className="text-sm md:text-base text-neutral-600 leading-loose max-w-2xl mr-auto"
+            style={{ fontFamily: "var(--font-doran)" }}
+          >
+            دارای امتیاز از شرایط اسپانسرشیپ باشگاه پازل؛ برای اطلاعات بیشتر با ما
+            در تماس باشید.
+          </p>
         </div>
       </div>
     </section>

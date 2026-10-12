@@ -12,6 +12,7 @@ import TributeSection from "@/components/sections/TributeSection";
 import HeadCoachSection from "@/components/sections/HeadCoachSection";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
+import CoachesSection from "@/components/sections/CoachesSection";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -38,6 +39,12 @@ export default async function Home() {
     .select("*")
     .eq("id", 1)
     .single();
+
+  const { data: coaches } = await supabase
+  .from("coaches")
+  .select("*")
+  .order("sort_order", { ascending: true })
+  .order("created_at", { ascending: false });
 
   const eventImages = (gallery ?? []).filter((g) => g.category === "events");
   const bookImages = (gallery ?? []).filter((g) => g.category === "books");
@@ -146,6 +153,9 @@ export default async function Home() {
 
           case "faq":
             return <FAQ key={index} />;
+            
+          case "coaches":
+            return <CoachesSection key={index} coaches={coaches ?? []} />;  
 
           default:
             return null;

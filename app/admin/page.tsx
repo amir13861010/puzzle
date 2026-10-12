@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Heart } from "lucide-react";
 import { UserCog } from "lucide-react";
+import { Users } from "lucide-react";
 export default async function AdminDashboard() {
   const supabase = await createClient();
   const {
@@ -49,6 +50,12 @@ export default async function AdminDashboard() {
   label: "سرمربی باشگاه",
   desc: "عکس، نام و توضیحات",
   icon: UserCog,
+},
+{
+  href: "/admin/coaches",
+  label: "مربی‌های باشگاه",
+  desc: "مدیریت تیم مربیان",
+  icon: Users,
 },
     {
   href: "/admin/gallery",
