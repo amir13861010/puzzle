@@ -1,35 +1,21 @@
-const TIERS = [
-  {
-    label: "اسپانسر پلاتینیوم",
-    sublabel: "PLATINUM SPONSOR",
-    sponsors: [
-      { name: "HAMERZ", logo: null },
-    ],
-  },
-  {
-    label: "اسپانسر طلایی",
-    sublabel: "GOLD SPONSOR",
-    sponsors: [
-      { name: "SPONSOR 02", logo: null },
-    ],
-  },
-  {
-    label: "اسپانسر نقره‌ای",
-    sublabel: "SILVER SPONSOR",
-    sponsors: [
-      { name: "SPONSOR 03", logo: null },
-    ],
-  },
-];
+type Partner = {
+  id: string;
+  name: string;
+  logo_url: string | null;
+  alt: string | null;
+  website_url: string | null;
+};
 
-export default function Partners() {
+export default function Partners({ partners }: { partners: Partner[] }) {
+  if (partners.length === 0) return null;
+
   return (
     <section
       className="bg-[#fafafa] text-black relative overflow-hidden border-b-2 border-black"
       dir="rtl"
     >
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        {/* تیتر SPONSOR */}
+        {/* تیتر */}
         <div className="pt-16 md:pt-24 pb-8 md:pb-12 border-b-2 border-black">
           <h2
             className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-black leading-[0.85] tracking-tighter uppercase"
@@ -37,58 +23,48 @@ export default function Partners() {
           >
             SPONSOR
           </h2>
-          <p
-            className="mt-4 md:mt-6 text-sm md:text-base text-neutral-500 font-mono tracking-widest uppercase"
-          >
+          <p className="mt-4 md:mt-6 text-sm md:text-base text-neutral-500 font-mono tracking-widest uppercase">
             OUR PARTNERS / 2025
           </p>
         </div>
 
-        {/* ردیف‌های tier */}
-        {TIERS.map((tier, tierIndex) => (
-          <div key={tier.label}>
-            {/* لیبل tier */}
-            <div className="py-5 md:py-7 border-b border-black/30">
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <h3
-                  className="text-xl md:text-3xl font-black text-black"
-                  style={{ fontFamily: "var(--font-doran)" }}
-                >
-                  {tier.label}
-                </h3>
-                <span className="font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase text-neutral-400">
-                  {tier.sublabel}
-                </span>
-              </div>
-            </div>
+        {/* گرید حامیان */}
+        <div className="py-16 md:py-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 border-b-2 border-black">
+          {partners.map((partner) => {
+            const Wrapper = partner.website_url ? "a" : "div";
+            const wrapperProps = partner.website_url
+              ? {
+                  href: partner.website_url,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                }
+              : {};
 
-            {/* محتوای sponsors — وسط */}
-            <div className="py-16 md:py-24 border-b-2 border-black flex items-center justify-center">
-              {tier.sponsors.length === 1 ? (
-                <div className="text-center">
+            return (
+              <Wrapper
+                key={partner.id}
+                {...(wrapperProps as any)}
+                className="group relative aspect-[4/3] border border-black/10 bg-white flex items-center justify-center p-8 hover:border-black transition-all"
+              >
+                {partner.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={partner.logo_url}
+                    alt={partner.alt || partner.name}
+                    className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
+                  />
+                ) : (
                   <div
-                    className="text-4xl md:text-6xl lg:text-7xl font-black text-black tracking-tighter"
+                    className="text-2xl md:text-3xl font-black text-black tracking-tight"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    {tier.sponsors[0].name}
+                    {partner.name}
                   </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 md:gap-20 items-center justify-items-center w-full">
-                  {tier.sponsors.map((s) => (
-                    <div
-                      key={s.name}
-                      className="text-2xl md:text-4xl font-black text-black tracking-tight"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      {s.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+                )}
+              </Wrapper>
+            );
+          })}
+        </div>
 
         {/* متن پایانی */}
         <div className="py-8 md:py-12 border-b-2 border-black">

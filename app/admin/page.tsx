@@ -13,6 +13,9 @@ import {
 import { Heart } from "lucide-react";
 import { UserCog } from "lucide-react";
 import { Users } from "lucide-react";
+import { MessageSquareQuote } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
+import { Handshake } from "lucide-react";
 export default async function AdminDashboard() {
   const supabase = await createClient();
   const {
@@ -75,12 +78,30 @@ export default async function AdminDashboard() {
   desc: "عکس، تیتر و توضیحات",
   icon: Heart,
 },
+{
+  href: "/admin/testimonials",
+  label: "تجربه باشگاه",
+  desc: "حرف‌های بچه‌ها",
+  icon: MessageSquareQuote,
+},
+{
+  href: "/admin/layout",
+  label: "چیدمان صفحه",
+  desc: "ترتیب بخش‌ها",
+  icon: LayoutGrid,
+},
     {
       href: "/admin/settings",
       label: "تنظیمات",
       desc: "متن‌ها و لینک‌ها",
       icon: Settings,
     },
+    {
+  href: "/admin/partners",
+  label: "حامیان",
+  desc: "مدیریت حامیان",
+  icon: Handshake,
+},
   ];
 
   return (

@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { getProducts, COURSES, type Course } from "@/lib/data";
-import { LAYOUT } from "@/lib/layout";
 import HeroSection from "@/components/sections/HeroSection";
 import EventsGallery from "@/components/sections/EventsGallery";
 import BooksGallery from "@/components/sections/BooksGallery";
@@ -10,64 +9,83 @@ import ProductItem from "@/components/sections/ProductItem";
 import CoachingSection from "@/components/sections/CoachingSection";
 import TributeSection from "@/components/sections/TributeSection";
 import HeadCoachSection from "@/components/sections/HeadCoachSection";
+import CoachesSection from "@/components/sections/CoachesSection";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
-import CoachesSection from "@/components/sections/CoachesSection";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const supabase = await createClient();
 
-  const { data: gallery } = await supabase
-    .from("gallery")
-    .select("*")
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false });
-
-  const { data: coachingItems } = await supabase
-    .from("coaching")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const { data: tribute } = await supabase
-    .from("tribute")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  const { data: headCoach } = await supabase
-    .from("head_coach")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  const { data: coaches } = await supabase
-  .from("coaches")
-  .select("*")
-  .order("sort_order", { ascending: true })
-  .order("created_at", { ascending: false });
+  const [
+    { data: layout },
+    { data: gallery },
+    { data: coachingItems },
+    { data: tribute },
+    { data: headCoach },
+    { data: coaches },
+    { data: testimonials },
+    { data: partners },
+  ] = await Promise.all([
+    supabase
+      .from("section_layout")
+      .select("*")
+      .eq("is_visible", true)
+      .order("sort_order"),
+    supabase
+      .from("gallery")
+      .select("*")
+      .order("sort_order")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("coaching")
+      .select("*")
+      .order("created_at", { ascending: false }),
+    supabase.from("tribute").select("*").eq("id", 1).single(),
+    supabase.from("head_coach").select("*").eq("id", 1).single(),
+    supabase
+      .from("coaches")
+      .select("*")
+      .order("sort_order")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("testimonials")
+      .select("*")
+      .order("sort_order")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("partners")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false }),
+  ]);
 
   const eventImages = (gallery ?? []).filter((g) => g.category === "events");
   const bookImages = (gallery ?? []).filter((g) => g.category === "books");
   const products = await getProducts();
 
+  const layoutItems = layout ?? [];
+
   return (
     <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans relative">
       <HeroSection />
 
-      {LAYOUT.map((item, index) => {
+      {layoutItems.map((item, index) => {
         switch (item.type) {
           case "events_gallery":
-            return <EventsGallery key={index} images={eventImages} />;
+            return <EventsGallery key={item.id} images={eventImages} />;
 
           case "books_gallery":
-            return <BooksGallery key={index} images={bookImages} />;
+            return <BooksGallery key={item.id} images={bookImages} />;
 
           case "course": {
             const course: Course | undefined = COURSES[item.source ?? 0];
             if (!course) return null;
             return (
               <section
-                key={index}
+                key={item.id}
                 className="bg-white text-black relative overflow-hidden"
                 dir="rtl"
               >
@@ -85,9 +103,6 @@ export default async function Home() {
                     >
                       آموزش تخصصی
                     </div>
-                    <div className="absolute top-1/3 left-4 -translate-y-1/2 -rotate-90 text-[10px] font-mono tracking-[0.4em] text-black/15 uppercase">
-                      SPEC: NO. {course.number} // VERIFIED
-                    </div>
                   </div>
 
                   <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24 relative z-10">
@@ -104,7 +119,7 @@ export default async function Home() {
             const displayIndex = item.source ?? 0;
             return (
               <section
-                key={index}
+                key={item.id}
                 className="bg-white text-black relative overflow-hidden"
                 dir="rtl"
               >
@@ -122,9 +137,6 @@ export default async function Home() {
                     >
                       محصول اختصاصی
                     </div>
-                    <div className="absolute top-1/3 left-4 -translate-y-1/2 -rotate-90 text-[10px] font-mono tracking-[0.4em] text-black/15 uppercase">
-                      SPEC: NO. P{String(displayIndex).padStart(2, "0")} // VERIFIED
-                    </div>
                   </div>
 
                   <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24 relative z-10">
@@ -137,25 +149,31 @@ export default async function Home() {
 
           case "coaching":
             return (
-              <CoachingSection key={index} items={coachingItems ?? []} />
+              <CoachingSection key={item.id} items={coachingItems ?? []} />
             );
 
           case "tribute":
-            return <TributeSection key={index} tribute={tribute ?? null} />;
+            return <TributeSection key={item.id} tribute={tribute ?? null} />;
 
           case "head_coach":
+            return <HeadCoachSection key={item.id} coach={headCoach ?? null} />;
+
+          case "coaches":
+            return <CoachesSection key={item.id} coaches={coaches ?? []} />;
+
+          case "testimonials":
             return (
-              <HeadCoachSection key={index} coach={headCoach ?? null} />
+              <TestimonialsSection
+                key={item.id}
+                testimonials={testimonials ?? []}
+              />
             );
 
           case "partners":
-            return <Partners key={index} />;
+            return <Partners key={item.id} partners={partners ?? []} />;
 
           case "faq":
-            return <FAQ key={index} />;
-            
-          case "coaches":
-            return <CoachesSection key={index} coaches={coaches ?? []} />;  
+            return <FAQ key={item.id} />;
 
           default:
             return null;

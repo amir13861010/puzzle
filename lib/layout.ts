@@ -8,6 +8,7 @@ export type SectionType =
   | "partners"
   | "head_coach"
   | "coaches"
+  | "testimonials"
   | "faq";
 
 export type LayoutItem = {
@@ -18,17 +19,17 @@ export type LayoutItem = {
 export const LAYOUT: LayoutItem[] = [
   { type: "events_gallery" },
   { type: "course", source: 0 },
-  { type: "product", source: 0 },
   { type: "coaching" },
-
+  { type: "product", source: 0 },
   { type: "course", source: 1 },
   { type: "product", source: 1 },
-  { type: "coaches" },        // ← اینجا (بعد محصول ۲)
+  { type: "coaches" },
   { type: "course", source: 2 },
   { type: "product", source: 2 },
   { type: "tribute" },
   { type: "books_gallery" },
   { type: "partners" },
   { type: "head_coach" },
+  { type: "testimonials" },
   { type: "faq" },
 ];
