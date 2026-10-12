@@ -8,7 +8,7 @@ type Args = {
   children: React.ReactNode;
 };
 
-const serverFunction = async function (args: any) {
+const serverFunction = async function (args: Parameters<typeof handleServerFunctions>[0]) {
   "use server";
   return handleServerFunctions({
     ...args,

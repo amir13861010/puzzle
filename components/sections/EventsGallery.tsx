@@ -76,7 +76,7 @@ export default function EventsGallery({
             <span className="bg-[#c8ff00] text-black px-2 py-0.5 border border-black">
               ROOM FULL OF BUILDERS
             </span>
-            <span>TEH // 2025'</span>
+            <span>TEH // 2025&apos;</span>
           </div>
         </div>
 

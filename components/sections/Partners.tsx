@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Partner = {
   id: string;
   name: string;
@@ -31,21 +33,8 @@ export default function Partners({ partners }: { partners: Partner[] }) {
         {/* گرید حامیان */}
         <div className="py-16 md:py-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 border-b-2 border-black">
           {partners.map((partner) => {
-            const Wrapper = partner.website_url ? "a" : "div";
-            const wrapperProps = partner.website_url
-              ? {
-                  href: partner.website_url,
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                }
-              : {};
-
-            return (
-              <Wrapper
-                key={partner.id}
-                {...(wrapperProps as any)}
-                className="group relative aspect-[4/3] border border-black/10 bg-white flex items-center justify-center p-8 hover:border-black transition-all"
-              >
+            const cardContent = (
+              <>
                 {partner.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -61,7 +50,31 @@ export default function Partners({ partners }: { partners: Partner[] }) {
                     {partner.name}
                   </div>
                 )}
-              </Wrapper>
+              </>
+            );
+
+            const className =
+              "group relative aspect-[4/3] border border-black/10 bg-white flex items-center justify-center p-8 hover:border-black transition-all";
+
+            // اگه website_url داره، لینک؛ وگرنه div
+            if (partner.website_url) {
+              return (
+                <a
+                  key={partner.id}
+                  href={partner.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {cardContent}
+                </a>
+              );
+            }
+
+            return (
+              <div key={partner.id} className={className}>
+                {cardContent}
+              </div>
             );
           })}
         </div>

@@ -74,7 +74,7 @@ export default function FAQ() {
             className="text-6xl md:text-8xl lg:text-9xl font-black leading-[0.9] text-black tracking-tighter uppercase"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            FAQ'S
+            FAQ&apos;S
             <span
               className="text-4xl md:text-6xl lg:text-7xl font-black tracking-normal mt-3 block"
               style={{ fontFamily: "var(--font-doran)" }}
