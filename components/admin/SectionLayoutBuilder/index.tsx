@@ -1,5 +1,5 @@
 import { getPayloadClient } from "@/lib/payload";
-import { SectionLayoutBuilderClient } from "./Client";
+import { SectionLayoutBuilderClient, type Section } from "./Client";
 
 export default async function SectionLayoutBuilder() {
   const payload = await getPayloadClient();
@@ -10,5 +10,7 @@ export default async function SectionLayoutBuilder() {
     sort: "_order",
   });
 
-  return <SectionLayoutBuilderClient initialSections={result.docs} />;
+  return (
+    <SectionLayoutBuilderClient initialSections={result.docs as unknown as Section[]} />
+  );
 }

@@ -30,14 +30,13 @@ import {
   addSection,
 } from "@/lib/payload-actions/section-layout";
 
-type Section = {
+export type Section = {
   id: string;
   type: string;
-  source: number | null;
+  source?: number | null;
   is_visible: boolean;
-  _order: number | null;
+  _order?: number | null;
 };
-
 // نقشه نام فارسی
 const SECTION_LABELS: Record<string, string> = {
   events_gallery: "گالری ایونت‌ها",
@@ -275,11 +274,11 @@ function SortableItem({
         <div className="flex-1 min-w-0">
           <div className="font-black text-black text-base">
             {label}
-            {section.source !== null && ` ${section.source + 1}`}
+            {section.source != null && ` ${section.source + 1}`}
           </div>
           <div className="font-mono text-[10px] tracking-widest uppercase text-neutral-500">
             {section.type}
-            {section.source !== null && ` · #${section.source}`}
+           {section.source != null && ` · #${section.source}`}
           </div>
         </div>
 
