@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Course } from "@/lib/data";
 
 export default function CourseItem({ course }: { course: Course }) {
@@ -5,20 +6,29 @@ export default function CourseItem({ course }: { course: Course }) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end mb-12 md:mb-16">
         <div className="md:col-span-4">
-          <div className="relative aspect-[4/5] overflow-hidden bg-black border-2 border-black shadow-[5px_5px_0px_#000]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={course.image}
-              alt={course.titleFa}
-              className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-300"
-            />
+          <Link
+            href={`/courses/${course.slug}`}
+            className="group block relative aspect-[4/5] overflow-hidden bg-black border-2 border-black shadow-[5px_5px_0px_#000]"
+          >
+            {course.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={course.image}
+                alt={course.title_fa}
+                className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white/20 text-xs font-mono">
+                NO IMG
+              </div>
+            )}
             <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black border border-black">
               <span className="w-1.5 h-1.5 bg-black rounded-full" />
               <span className="text-[10px] font-mono tracking-widest uppercase font-bold">
                 دوره — {course.tag}
               </span>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="md:col-span-8">
@@ -33,15 +43,17 @@ export default function CourseItem({ course }: { course: Course }) {
               className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.85] text-black/10 whitespace-nowrap uppercase"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              {course.titleEn}
+              {course.title_en}
             </h3>
           </div>
-          <h4
-            className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.95] text-black mt-6 md:mt-10"
-            style={{ fontFamily: "var(--font-doran)" }}
-          >
-            {course.titleFa}
-          </h4>
+          <Link href={`/courses/${course.slug}`}>
+            <h4
+              className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.95] text-black mt-6 md:mt-10 hover:text-black/70 transition-colors"
+              style={{ fontFamily: "var(--font-doran)" }}
+            >
+              {course.title_fa}
+            </h4>
+          </Link>
         </div>
       </div>
 
@@ -57,7 +69,7 @@ export default function CourseItem({ course }: { course: Course }) {
             className="text-base md:text-lg leading-loose text-neutral-800"
             style={{ fontFamily: "var(--font-doran)" }}
           >
-            {course.desc}
+            {course.description}
           </p>
         </div>
 
@@ -70,7 +82,7 @@ export default function CourseItem({ course }: { course: Course }) {
               className="text-base md:text-lg font-bold"
               style={{ fontFamily: "var(--font-doran)" }}
             >
-              {course.teacher}
+              {course.teacher_name ?? "—"}
             </span>
           </div>
 
@@ -82,24 +94,24 @@ export default function CourseItem({ course }: { course: Course }) {
               className="text-base md:text-lg font-bold"
               style={{ fontFamily: "var(--font-doran)" }}
             >
-              {course.price}{" "}
+              {course.price_display}{" "}
               <span className="text-xs text-neutral-500">تومان</span>
             </span>
           </div>
 
           <div className="pt-6">
-            <a
-              href="/courses"
+            <Link
+              href={`/courses/${course.slug}`}
               className="group flex items-center justify-between w-full border-2 border-black bg-black text-white hover:bg-[#c8ff00] hover:text-black px-6 py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
             >
               <span
                 className="text-sm md:text-base font-bold"
                 style={{ fontFamily: "var(--font-doran)" }}
               >
-                ثبت‌نام در دوره ❋
+                مشاهده دوره ❋
               </span>
               <span className="font-mono font-bold text-lg">←</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
