@@ -8,7 +8,8 @@ type Args = {
   children: React.ReactNode;
 };
 
-const serverFunction = async function (args: Parameters<typeof handleServerFunctions>[0]) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serverFunction = async function (args: any) {
   "use server";
   return handleServerFunctions({
     ...args,
