@@ -8,11 +8,13 @@ export async function updateSectionOrder(
 ) {
   const payload = await getPayloadClient();
 
-  // مرتب‌سازی بر اساس _order
   const sortedItems = [...items].sort((a, b) => a._order - b._order);
 
-  // مستقیم از SQL استفاده کن (روش مطمئن)
-  const pool = (payload.db as unknown as { pool: { query: (q: string, p: unknown[]) => Promise<unknown> } }).pool;
+  const pool = (
+    payload.db as unknown as {
+      pool: { query: (q: string, p: unknown[]) => Promise<unknown> };
+    }
+  ).pool;
 
   if (!pool) {
     return { error: "Database pool not available" };
@@ -42,13 +44,11 @@ export async function toggleSectionVisibility(
   isVisible: boolean
 ) {
   const payload = await getPayloadClient();
-
   await payload.update({
     collection: "section_layout",
     id,
     data: { is_visible: isVisible },
   });
-
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };
@@ -56,12 +56,10 @@ export async function toggleSectionVisibility(
 
 export async function deleteSection(id: string) {
   const payload = await getPayloadClient();
-
   await payload.delete({
     collection: "section_layout",
     id,
   });
-
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };
@@ -69,7 +67,6 @@ export async function deleteSection(id: string) {
 
 export async function addSection(type: string, source?: number) {
   const payload = await getPayloadClient();
-
   await payload.create({
     collection: "section_layout",
     data: {
@@ -78,7 +75,6 @@ export async function addSection(type: string, source?: number) {
       is_visible: true,
     },
   });
-
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };
