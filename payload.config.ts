@@ -25,6 +25,7 @@ import { Posts } from "./collections/Posts";
 import { PostCategories } from "./collections/PostCategories";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+import { Comments } from "./collections/Comments";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -55,6 +56,7 @@ export default buildConfig({
     SectionLayout,
     Posts,
     PostCategories,
+    Comments,
   ],
 plugins: [
   seoPlugin({

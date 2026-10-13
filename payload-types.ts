@@ -85,6 +85,7 @@ export interface Config {
     section_layout: SectionLayout;
     posts: Post;
     post_categories: PostCategory;
+    comments: Comment;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -110,6 +111,7 @@ export interface Config {
     section_layout: SectionLayoutSelect<false> | SectionLayoutSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     post_categories: PostCategoriesSelect<false> | PostCategoriesSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -479,6 +481,28 @@ export interface PostCategory {
   createdAt: string;
 }
 /**
+ * کامنت‌های وبلاگ
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: string;
+  fullName: string;
+  email: string;
+  comment: string;
+  /**
+   * مقاله‌ای که این کامنت براش نوشته شده
+   */
+  post: string | Post;
+  /**
+   * تا وقتی تایید نشه، توی سایت نمایش داده نمیشه
+   */
+  approved?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -573,6 +597,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'post_categories';
         value: string | PostCategory;
+      } | null)
+    | ({
+        relationTo: 'comments';
+        value: string | Comment;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -909,6 +937,19 @@ export interface PostCategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments_select".
+ */
+export interface CommentsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  comment?: T;
+  post?: T;
+  approved?: T;
   updatedAt?: T;
   createdAt?: T;
 }
