@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {
-  GripVertical,
   Eye,
   EyeOff,
   Loader2,
@@ -129,18 +128,15 @@ export function SectionLayoutBuilderClient({
 
   return (
     <div className="p-8 max-w-4xl mx-auto" dir="rtl">
-      {/* هدر */}
       <div className="mb-8">
         <h1 className="text-3xl font-black text-black mb-2">
           چیدمان صفحه اصلی
         </h1>
         <p className="text-sm text-neutral-500">
-          ترتیب سکشن‌ها رو با فلش‌های بالا/پایین تنظیم کن. با کلیک روی چشم،
-          سکشن رو مخفی/نمایان کن.
+          ترتیب سکشن‌ها رو با فلش‌های بالا/پایین تنظیم کن.
         </p>
       </div>
 
-      {/* وضعیت */}
       <div className="flex items-center justify-between mb-4 min-h-[24px]">
         <div className="flex items-center gap-3">
           {saving && (
@@ -159,10 +155,9 @@ export function SectionLayoutBuilderClient({
         </div>
       </div>
 
-      {/* لیست سکشن‌ها */}
       <div className="space-y-2">
         {sections.map((section, index) => (
-          <SortableItem
+          <SectionItem
             key={section.id}
             section={section}
             index={index}
@@ -175,7 +170,6 @@ export function SectionLayoutBuilderClient({
         ))}
       </div>
 
-      {/* دکمه افزودن */}
       <div className="mt-8 pt-6 border-t border-black/10">
         <div className="text-sm font-bold text-black mb-3">
           افزودن سکشن جدید:
@@ -197,7 +191,7 @@ export function SectionLayoutBuilderClient({
   );
 }
 
-function SortableItem({
+function SectionItem({
   section,
   index,
   total,
@@ -227,7 +221,6 @@ function SortableItem({
       }`}
     >
       <div className="flex items-center gap-3 p-3 md:p-4">
-        {/* فلش‌های بالا/پایین */}
         <div className="flex flex-col gap-0.5 shrink-0">
           <button
             onClick={onMoveUp}
@@ -247,15 +240,12 @@ function SortableItem({
           </button>
         </div>
 
-        {/* شماره */}
         <div className="font-mono text-xs text-black/40 shrink-0 w-8">
           {String(index + 1).padStart(2, "0")}
         </div>
 
-        {/* رنگ */}
         <div className="w-1.5 h-10 shrink-0" style={{ backgroundColor: color }} />
 
-        {/* اطلاعات */}
         <div className="flex-1 min-w-0">
           <div className="font-black text-black text-sm md:text-base">
             {label}
@@ -267,7 +257,6 @@ function SortableItem({
           </div>
         </div>
 
-        {/* دکمه مخفی */}
         <button
           onClick={() => onToggle(section.id, section.is_visible)}
           className={`shrink-0 p-2 transition-colors ${
@@ -284,7 +273,6 @@ function SortableItem({
           )}
         </button>
 
-        {/* دکمه حذف */}
         <button
           onClick={() => onDelete(section.id)}
           className="shrink-0 p-2 text-red-400 hover:text-red-600 transition-colors"

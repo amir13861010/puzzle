@@ -1,3 +1,4 @@
+import "../globals.css";
 import config from "@payload-config";
 import "@payloadcms/next/css";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";

@@ -6,7 +6,7 @@ import {
   Playfair_Display,
   JetBrains_Mono,
 } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/sections/Footer";
 
