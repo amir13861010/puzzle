@@ -1,27 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import {
-  restrictToVerticalAxis,
-  restrictToParentElement,
-} from "@dnd-kit/modifiers";
+import { useState } from "react";
 import {
   GripVertical,
   Eye,
@@ -30,6 +9,8 @@ import {
   Check,
   Trash2,
   Plus,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import {
   updateSectionOrder,
@@ -46,7 +27,6 @@ export type Section = {
   _order?: number | null;
 };
 
-// نقشه نام فارسی
 const SECTION_LABELS: Record<string, string> = {
   events_gallery: "گالری ایونت‌ها",
   books_gallery: "گالری کتاب‌ها",
@@ -85,65 +65,46 @@ export function SectionLayoutBuilderClient({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // برای debounce
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const pendingSectionsRef = useRef<Section[] | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = sections.findIndex((s) => s.id === active.id);
-    const newIndex = sections.findIndex((s) => s.id === over.id);
-
-    const newSections = arrayMove(sections, oldIndex, newIndex).map(
-      (s, i) => ({ ...s, _order: i })
-    );
-
-    setSections(newSections);
-    pendingSectionsRef.current = newSections;
-
-    // Debounce: ۶۰۰ms بعد از آخرین درگ، ذخیره کن
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
-
-    saveTimeoutRef.current = setTimeout(async () => {
-      if (pendingSectionsRef.current) {
-        await saveOrder(pendingSectionsRef.current);
-        pendingSectionsRef.current = null;
-      }
-    }, 600);
-  }
-
   async function saveOrder(items: Section[]) {
     setSaving(true);
     setSaved(false);
     setError(null);
 
     const result = await updateSectionOrder(
-      items.map((s) => ({ id: s.id, _order: s._order ?? 0 }))
+      items.map((s, i) => ({ id: s.id, _order: i }))
     );
 
     setSaving(false);
 
     if (result?.error) {
       setError(result.error);
-      console.error("Reorder error:", result.error);
       return;
     }
 
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  }
+
+  async function moveUp(index: number) {
+    if (index === 0) return;
+    const newSections = [...sections];
+    [newSections[index - 1], newSections[index]] = [
+      newSections[index],
+      newSections[index - 1],
+    ];
+    setSections(newSections);
+    await saveOrder(newSections);
+  }
+
+  async function moveDown(index: number) {
+    if (index === sections.length - 1) return;
+    const newSections = [...sections];
+    [newSections[index], newSections[index + 1]] = [
+      newSections[index + 1],
+      newSections[index],
+    ];
+    setSections(newSections);
+    await saveOrder(newSections);
   }
 
   async function handleToggle(id: string, current: boolean) {
@@ -174,8 +135,8 @@ export function SectionLayoutBuilderClient({
           چیدمان صفحه اصلی
         </h1>
         <p className="text-sm text-neutral-500">
-          ترتیب سکشن‌ها رو با درگ کردن جابجا کن. با کلیک روی چشم، سکشن رو
-          مخفی/نمایان کن.
+          ترتیب سکشن‌ها رو با فلش‌های بالا/پایین تنظیم کن. با کلیک روی چشم،
+          سکشن رو مخفی/نمایان کن.
         </p>
       </div>
 
@@ -194,36 +155,25 @@ export function SectionLayoutBuilderClient({
               ذخیره شد
             </span>
           )}
-          {error && (
-            <span className="text-sm text-red-600">{error}</span>
-          )}
+          {error && <span className="text-sm text-red-600">{error}</span>}
         </div>
       </div>
 
       {/* لیست سکشن‌ها */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-      >
-        <SortableContext
-          items={sections.map((s) => s.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          <div className="space-y-2">
-            {sections.map((section, index) => (
-              <SortableItem
-                key={section.id}
-                section={section}
-                index={index}
-                onToggle={handleToggle}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+      <div className="space-y-2">
+        {sections.map((section, index) => (
+          <SortableItem
+            key={section.id}
+            section={section}
+            index={index}
+            total={sections.length}
+            onMoveUp={() => moveUp(index)}
+            onMoveDown={() => moveDown(index)}
+            onToggle={handleToggle}
+            onDelete={handleDelete}
+          />
+        ))}
+      </div>
 
       {/* دکمه افزودن */}
       <div className="mt-8 pt-6 border-t border-black/10">
@@ -250,53 +200,52 @@ export function SectionLayoutBuilderClient({
 function SortableItem({
   section,
   index,
+  total,
+  onMoveUp,
+  onMoveDown,
   onToggle,
   onDelete,
 }: {
   section: Section;
   index: number;
+  total: number;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
   onToggle: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
 }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: section.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-    zIndex: isDragging ? 100 : 1,
-  };
-
   const label = SECTION_LABELS[section.type] || section.type;
   const color = SECTION_COLORS[section.type] || "#c8ff00";
 
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
+
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      className={`bg-white border transition-all ${
-        isDragging
-          ? "border-black shadow-lg rotate-1"
-          : "border-black/10 hover:border-black/30"
-      } ${!section.is_visible ? "opacity-50" : ""}`}
+      className={`bg-white border transition-all border-black/10 hover:border-black/30 ${
+        !section.is_visible ? "opacity-50" : ""
+      }`}
     >
-      <div className="flex items-center gap-4 p-4">
-        {/* دستگیره درگ */}
-        <button
-          {...attributes}
-          {...listeners}
-          className="cursor-grab active:cursor-grabbing text-black/30 hover:text-black transition-colors p-1"
-          aria-label="جابجایی"
-        >
-          <GripVertical className="w-5 h-5" />
-        </button>
+      <div className="flex items-center gap-3 p-3 md:p-4">
+        {/* فلش‌های بالا/پایین */}
+        <div className="flex flex-col gap-0.5 shrink-0">
+          <button
+            onClick={onMoveUp}
+            disabled={isFirst}
+            className="p-1 text-black/40 hover:text-black hover:bg-black/5 rounded transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+            aria-label="بالا"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </button>
+          <button
+            onClick={onMoveDown}
+            disabled={isLast}
+            className="p-1 text-black/40 hover:text-black hover:bg-black/5 rounded transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+            aria-label="پایین"
+          >
+            <ChevronDown className="w-4 h-4" />
+          </button>
+        </div>
 
         {/* شماره */}
         <div className="font-mono text-xs text-black/40 shrink-0 w-8">
@@ -304,15 +253,15 @@ function SortableItem({
         </div>
 
         {/* رنگ */}
-        <div className="w-2 h-10 shrink-0" style={{ backgroundColor: color }} />
+        <div className="w-1.5 h-10 shrink-0" style={{ backgroundColor: color }} />
 
         {/* اطلاعات */}
         <div className="flex-1 min-w-0">
-          <div className="font-black text-black text-base">
+          <div className="font-black text-black text-sm md:text-base">
             {label}
             {section.source != null && ` ${section.source + 1}`}
           </div>
-          <div className="font-mono text-[10px] tracking-widest uppercase text-neutral-500">
+          <div className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 truncate">
             {section.type}
             {section.source != null && ` · #${section.source}`}
           </div>
