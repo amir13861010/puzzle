@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   DndContext,
   closestCenter,
@@ -22,7 +22,15 @@ import {
   restrictToVerticalAxis,
   restrictToParentElement,
 } from "@dnd-kit/modifiers";
-import { GripVertical, Eye, EyeOff, Loader2, Check, Trash2, Plus } from "lucide-react";
+import {
+  GripVertical,
+  Eye,
+  EyeOff,
+  Loader2,
+  Check,
+  Trash2,
+  Plus,
+} from "lucide-react";
 import {
   updateSectionOrder,
   toggleSectionVisibility,
@@ -37,6 +45,7 @@ export type Section = {
   is_visible: boolean;
   _order?: number | null;
 };
+
 // نقشه نام فارسی
 const SECTION_LABELS: Record<string, string> = {
   events_gallery: "گالری ایونت‌ها",
@@ -74,6 +83,11 @@ export function SectionLayoutBuilderClient({
   const [sections, setSections] = useState(initialSections);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // برای debounce
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingSectionsRef = useRef<Section[] | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -84,7 +98,7 @@ export function SectionLayoutBuilderClient({
     })
   );
 
-  async function handleDragEnd(event: DragEndEvent) {
+  function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -96,16 +110,38 @@ export function SectionLayoutBuilderClient({
     );
 
     setSections(newSections);
-    await saveOrder(newSections);
+    pendingSectionsRef.current = newSections;
+
+    // Debounce: ۶۰۰ms بعد از آخرین درگ، ذخیره کن
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(async () => {
+      if (pendingSectionsRef.current) {
+        await saveOrder(pendingSectionsRef.current);
+        pendingSectionsRef.current = null;
+      }
+    }, 600);
   }
 
   async function saveOrder(items: Section[]) {
     setSaving(true);
     setSaved(false);
-    await updateSectionOrder(
+    setError(null);
+
+    const result = await updateSectionOrder(
       items.map((s) => ({ id: s.id, _order: s._order ?? 0 }))
     );
+
     setSaving(false);
+
+    if (result?.error) {
+      setError(result.error);
+      console.error("Reorder error:", result.error);
+      return;
+    }
+
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -144,7 +180,7 @@ export function SectionLayoutBuilderClient({
       </div>
 
       {/* وضعیت */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 min-h-[24px]">
         <div className="flex items-center gap-3">
           {saving && (
             <span className="flex items-center gap-2 text-sm text-black/60">
@@ -152,11 +188,14 @@ export function SectionLayoutBuilderClient({
               در حال ذخیره...
             </span>
           )}
-          {saved && (
+          {saved && !saving && (
             <span className="flex items-center gap-2 text-sm text-green-600">
               <Check className="w-4 h-4" />
               ذخیره شد
             </span>
+          )}
+          {error && (
+            <span className="text-sm text-red-600">{error}</span>
           )}
         </div>
       </div>
@@ -265,10 +304,7 @@ function SortableItem({
         </div>
 
         {/* رنگ */}
-        <div
-          className="w-2 h-10 shrink-0"
-          style={{ backgroundColor: color }}
-        />
+        <div className="w-2 h-10 shrink-0" style={{ backgroundColor: color }} />
 
         {/* اطلاعات */}
         <div className="flex-1 min-w-0">
@@ -278,7 +314,7 @@ function SortableItem({
           </div>
           <div className="font-mono text-[10px] tracking-widest uppercase text-neutral-500">
             {section.type}
-           {section.source != null && ` · #${section.source}`}
+            {section.source != null && ` · #${section.source}`}
           </div>
         </div>
 
