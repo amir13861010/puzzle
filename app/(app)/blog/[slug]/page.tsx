@@ -4,6 +4,7 @@ import { getPayloadClient } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { ArrowRight, Clock, Calendar, Share2, Asterisk } from "lucide-react";
 import BlogComments from "@/components/BlogComments";
+import ShareButton from "@/components/ShareButton";
 export const dynamic = "force-dynamic";
 
 export default async function BlogPostPage({
@@ -150,13 +151,7 @@ export default async function BlogPostPage({
             <div className="mt-16 pt-8 border-t-2 border-black flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold">
               <div className="flex items-center gap-3">
                 <span className="uppercase text-neutral-500">ACTION:</span>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 border-2 border-black bg-white hover:bg-[#c8ff00] px-4 py-2 transition-all shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5"
-                >
-                  <Share2 className="w-4 h-4" />
-                  اشتراک‌گذاری مقاله
-                </button>
+               <ShareButton title={post.title} text={post.excerpt || ""} />
               </div>
 
               <div className="font-mono text-neutral-500 uppercase tracking-widest text-[11px]">
