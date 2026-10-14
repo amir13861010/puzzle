@@ -177,7 +177,7 @@ export default async function BlogPostPage({
                 </span>
               </Link>
             </div>
-<BlogComments postId={post.id} />
+            <BlogComments postId={post.id} />
           </div>
 
         </div>

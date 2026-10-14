@@ -6,6 +6,7 @@ import {
   Playfair_Display,
   JetBrains_Mono,
 } from "next/font/google";
+import Script from "next/script";
 import "../globals.css";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/sections/Footer";
@@ -114,6 +115,8 @@ export const metadata: Metadata = {
   },
 };
 
+const GA_ID = "G-EYHG60JB3K";
+
 export default function RootLayout({
   children,
 }: {
@@ -125,6 +128,28 @@ export default function RootLayout({
       dir="rtl"
       className={`${doran.variable} ${spaceGrotesk.variable} ${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased`}
     >
+      <head>
+        {/* Google Analytics */}
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans bg-black">
         <ConditionalHeader />
         {children}
