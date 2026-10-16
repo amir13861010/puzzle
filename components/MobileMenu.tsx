@@ -1,22 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import type { BlogCategory } from "@/components/BlogMegaMenu";
 
 const menuItems = [
   { label: "فروشگاه", href: "/store" },
   { label: "پازل", href: "/puzzle" },
   { label: "باشگاه", href: "/club" },
-  { label: "بلاگ", href: "/blog" },
 ];
 
 export default function MobileMenu({
   open,
   onClose,
+  blogCategories = [],
 }: {
   open: boolean;
   onClose: () => void;
+  blogCategories?: BlogCategory[];
 }) {
+  const [blogOpen, setBlogOpen] = useState(false);
+
   return (
     <>
       {/* Overlay */}
@@ -29,12 +34,12 @@ export default function MobileMenu({
 
       {/* Panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[70] w-full max-w-md bg-black transition-transform duration-500 ease-out ${
+        className={`fixed top-0 right-0 bottom-0 z-[70] w-full max-w-md bg-black transition-transform duration-500 ease-out overflow-y-auto ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
+        <div className="flex items-center justify-between p-6 border-b border-white/10 sticky top-0 bg-black z-10">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white flex items-center justify-center">
               <svg
@@ -64,7 +69,7 @@ export default function MobileMenu({
         </div>
 
         {/* Menu */}
-        <nav className="p-6">
+        <nav className="p-6 pb-32">
           <ul className="space-y-1">
             {menuItems.map((item, i) => (
               <li key={item.href}>
@@ -87,11 +92,70 @@ export default function MobileMenu({
                 </Link>
               </li>
             ))}
+
+            {/* بلاگ با آکاردئون */}
+            <li>
+              <button
+                type="button"
+                onClick={() => setBlogOpen(!blogOpen)}
+                className="group w-full flex items-center justify-between py-5 border-b border-white/10 text-white hover:text-white/60 transition-colors"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="text-xs font-mono text-white/30">
+                    0{menuItems.length + 1}
+                  </span>
+                  <span className="text-3xl md:text-4xl font-black">بلاگ</span>
+                </div>
+                <ChevronDown
+                  className={`w-5 h-5 text-white/30 transition-transform duration-300 ${
+                    blogOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* زیرمنو */}
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  blogOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="py-4 pr-8 flex flex-col gap-5">
+                  {blogCategories.length === 0 ? (
+                    <span className="text-xs text-white/30">
+                      هنوز دسته‌بندی‌ای اضافه نشده
+                    </span>
+                  ) : (
+                    blogCategories.map((cat) => (
+                      <div key={cat.id}>
+                        {/* دسته مادر — غیرقابل کلیک */}
+                        <div className="text-[11px] font-bold text-white/40 tracking-widest uppercase mb-3">
+                          {cat.name}
+                        </div>
+                        <ul className="space-y-2">
+                          {cat.children.map((child) => (
+                            <li key={child.id}>
+                              <Link
+                                href={`/blog/category/${child.slug}`}
+                                onClick={onClose}
+                                className="flex items-center gap-2 text-sm text-white/70 hover:text-white py-1.5 transition-colors"
+                              >
+                                <span className="w-1 h-1 rounded-full bg-[#c8ff00]/60 shrink-0" />
+                                {child.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </li>
           </ul>
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 inset-x-0 p-6 border-t border-white/10">
+        <div className="absolute bottom-0 inset-x-0 p-6 border-t border-white/10 bg-black">
           <div className="flex items-center justify-between text-xs text-white/40">
             <span className="font-mono">Est. 1403</span>
             <a

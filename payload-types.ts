@@ -431,15 +431,19 @@ export interface Post {
   id: string;
   title: string;
   /**
-   * آدرس یکتای مقاله (انگلیسی)
+   * آدرس یکتای مقاله
    */
   slug: string;
-  /**
-   * خلاصه مقاله (برای SEO و لیست بلاگ)
-   */
   excerpt?: string | null;
   coverImage?: (string | null) | Media;
-  category?: (string | null) | PostCategory;
+  /**
+   * اول دسته مادر رو انتخاب کن
+   */
+  parentCategory: string | PostCategory;
+  /**
+   * بعد از انتخاب دسته مادر، زیردسته رو انتخاب کن
+   */
+  subCategory: string | PostCategory;
   content: {
     root: {
       type: string;
@@ -476,6 +480,10 @@ export interface PostCategory {
   id: string;
   name: string;
   slug: string;
+  /**
+   * اگه این یه دسته فرزنده، دسته مادرش رو انتخاب کن. اگه دسته مادره، خالی بذار.
+   */
+  parent?: (string | null) | PostCategory;
   description?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -915,7 +923,8 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   excerpt?: T;
   coverImage?: T;
-  category?: T;
+  parentCategory?: T;
+  subCategory?: T;
   content?: T;
   status?: T;
   publishedAt?: T;
@@ -936,6 +945,7 @@ export interface PostsSelect<T extends boolean = true> {
 export interface PostCategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  parent?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;

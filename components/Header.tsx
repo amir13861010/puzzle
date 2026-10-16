@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import MobileMenu from "@/components/MobileMenu";
+import BlogMegaMenu, { type BlogCategory } from "@/components/BlogMegaMenu";
 import { useCart } from "@/lib/cart";
 import CartSheet from "@/components/CartSheet";
 
@@ -10,10 +11,20 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [blogMegaOpen, setBlogMegaOpen] = useState(false);
+  const [blogCategories, setBlogCategories] = useState<BlogCategory[]>([]);
+
   const totalItems = useCart((s) => s.totalItems);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/blog-categories")
+      .then((res) => res.json())
+      .then((data) => setBlogCategories(data.categories || []))
+      .catch(() => setBlogCategories([]));
   }, []);
 
   const itemCount = mounted ? totalItems() : 0;
@@ -69,12 +80,21 @@ export default function Header() {
             >
               باشگاه
             </Link>
-            <Link
-              href="/blog"
-              className="px-6 flex items-center text-sm font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-colors border-l border-black"
+
+            {/* بلاگ با مگا منو */}
+            <div
+              className="relative flex items-stretch border-l border-black"
+              onMouseEnter={() => setBlogMegaOpen(true)}
+              onMouseLeave={() => setBlogMegaOpen(false)}
             >
-              بلاگ
-            </Link>
+              <button
+                type="button"
+                className="px-6 flex items-center text-sm font-bold uppercase tracking-wide hover:bg-black hover:text-white transition-colors"
+              >
+                بلاگ
+              </button>
+              <BlogMegaMenu open={blogMegaOpen} categories={blogCategories} />
+            </div>
           </nav>
 
           {/* بلوک ۴: سبد */}
@@ -112,7 +132,6 @@ export default function Header() {
 
           {/* بلوک ۵: شبکه‌های اجتماعی */}
           <div className="hidden md:flex items-stretch bg-neutral-100 text-black">
-            {/* اینستاگرام */}
             <a
               href="https://instagram.com/"
               target="_blank"
@@ -138,7 +157,6 @@ export default function Header() {
               </svg>
             </a>
 
-            {/* لینکدین */}
             <a
               href="https://linkedin.com/"
               target="_blank"
@@ -192,7 +210,11 @@ export default function Header() {
       </header>
 
       {/* منوی موبایل */}
-      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileMenu
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        blogCategories={blogCategories}
+      />
 
       {/* Sheet سبد خرید */}
       <CartSheet open={cartOpen} onClose={() => setCartOpen(false)} />

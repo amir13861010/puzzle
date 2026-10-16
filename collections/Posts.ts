@@ -1,16 +1,20 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, FilterOptionsProps } from "payload";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "category", "status", "publishedAt"],
+    defaultColumns: [
+      "title",
+      "parentCategory",
+      "subCategory",
+      "status",
+      "publishedAt",
+    ],
   },
   access: {
     read: ({ req }) => {
-      // اگه کاربر لاگین کرده، همه رو ببینه
       if (req.user) return true;
-      // اگه مهمان، فقط published رو ببینه
       return {
         status: {
           equals: "published",
@@ -23,44 +27,74 @@ export const Posts: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
+      label: "عنوان مقاله",
     },
     {
       name: "slug",
       type: "text",
       required: true,
       unique: true,
+      label: "Slug (انگلیسی)",
       admin: {
-        description: "آدرس یکتای مقاله (انگلیسی)",
+        description: "آدرس یکتای مقاله",
       },
     },
     {
       name: "excerpt",
       type: "textarea",
       maxLength: 300,
-      admin: {
-        description: "خلاصه مقاله (برای SEO و لیست بلاگ)",
-      },
+      label: "خلاصه مقاله",
     },
     {
       name: "coverImage",
       type: "upload",
       relationTo: "media",
+      label: "تصویر کاور",
     },
+    // ==================== دسته‌بندی دو مرحله‌ای ====================
     {
-      name: "category",
+      name: "parentCategory",
       type: "relationship",
       relationTo: "post_categories",
+      required: true,
+      label: "دسته مادر",
+      filterOptions: {
+        parent: { exists: false },
+      } as never,
+      admin: {
+        description: "اول دسته مادر رو انتخاب کن",
+      },
     },
+    {
+      name: "subCategory",
+      type: "relationship",
+      relationTo: "post_categories",
+      required: true,
+      label: "زیردسته",
+      filterOptions: (({ data }: FilterOptionsProps) => {
+        const parentId = data?.parentCategory;
+        if (!parentId) return false;
+        return {
+          parent: { equals: parentId },
+        };
+      }) as never,
+      admin: {
+        description: "بعد از انتخاب دسته مادر، زیردسته رو انتخاب کن",
+      },
+    },
+    // ==================== محتوا ====================
     {
       name: "content",
       type: "richText",
       required: true,
+      label: "محتوای مقاله",
     },
     {
       name: "status",
       type: "select",
       defaultValue: "draft",
       required: true,
+      label: "وضعیت",
       options: [
         { label: "پیش‌نویس", value: "draft" },
         { label: "منتشر شده", value: "published" },
@@ -72,6 +106,7 @@ export const Posts: CollectionConfig = {
     {
       name: "publishedAt",
       type: "date",
+      label: "تاریخ انتشار",
       admin: {
         position: "sidebar",
         date: {

@@ -2,9 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPayloadClient } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
-import { ArrowRight, Clock, Calendar, Share2, Asterisk } from "lucide-react";
+import { ArrowRight, Clock, Calendar, Asterisk } from "lucide-react";
 import BlogComments from "@/components/BlogComments";
 import ShareButton from "@/components/ShareButton";
+
 export const dynamic = "force-dynamic";
 
 export default async function BlogPostPage({
@@ -25,6 +26,16 @@ export default async function BlogPostPage({
 
   const post = posts.docs[0];
   if (!post) notFound();
+
+  // استخراج اطلاعات دسته‌بندی
+  const parentCategory =
+    post.parentCategory && typeof post.parentCategory === "object"
+      ? post.parentCategory
+      : null;
+  const subCategory =
+    post.subCategory && typeof post.subCategory === "object"
+      ? post.subCategory
+      : null;
 
   return (
     <main
@@ -49,10 +60,9 @@ export default async function BlogPostPage({
 
       <article className="pt-24 md:pt-36 pb-24 relative z-10">
         <div className="max-w-[1280px] mx-auto px-6 md:px-12">
-          
           {/* نوار مسیر (Breadcrumb) + مشخصات ژورنالی */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4 mb-10 md:mb-16 font-mono text-xs font-bold uppercase tracking-widest text-neutral-600">
-            <nav className="flex items-center gap-2">
+            <nav className="flex items-center gap-2 flex-wrap">
               <Link
                 href="/"
                 className="hover:text-black hover:bg-[#c8ff00] px-1 transition-colors"
@@ -60,16 +70,25 @@ export default async function BlogPostPage({
                 HOME
               </Link>
               <span>/</span>
-              <Link
-                href="/blog"
-                className="hover:text-black hover:bg-[#c8ff00] px-1 transition-colors"
-              >
-                BLOG & ESSAYS
-              </Link>
-              <span>/</span>
-              <span className="text-black bg-[#c8ff00] px-2 py-0.5 border border-black">
-                READING
+              <span className="hover:text-black hover:bg-[#c8ff00] px-1 transition-colors">
+                BLOG
               </span>
+              {parentCategory && (
+                <>
+                  <span>/</span>
+                  <span className="text-black/60">
+                    {parentCategory.name}
+                  </span>
+                </>
+              )}
+              {subCategory && (
+                <>
+                  <span>/</span>
+                  <span className="text-black bg-[#c8ff00] px-2 py-0.5 border border-black">
+                    {subCategory.name}
+                  </span>
+                </>
+              )}
             </nav>
 
             <div className="flex items-center gap-3 text-[11px]">
@@ -83,9 +102,9 @@ export default async function BlogPostPage({
           {/* سربرگ مقاله (Title, Excerpt, Metadata) */}
           <header className="max-w-4xl mx-auto mb-12 md:mb-16">
             <div className="flex flex-wrap items-center gap-3 mb-6 font-mono text-xs">
-              {post.category && typeof post.category === "object" && (
+              {subCategory && (
                 <span className="bg-black text-white font-bold px-3 py-1 border border-black uppercase tracking-wider">
-                  {post.category.name}
+                  {subCategory.name}
                 </span>
               )}
               {post.publishedAt && (
@@ -151,7 +170,7 @@ export default async function BlogPostPage({
             <div className="mt-16 pt-8 border-t-2 border-black flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold">
               <div className="flex items-center gap-3">
                 <span className="uppercase text-neutral-500">ACTION:</span>
-               <ShareButton title={post.title} text={post.excerpt || ""} />
+                <ShareButton title={post.title} text={post.excerpt || ""} />
               </div>
 
               <div className="font-mono text-neutral-500 uppercase tracking-widest text-[11px]">
@@ -159,22 +178,23 @@ export default async function BlogPostPage({
               </div>
             </div>
 
-            {/* دکمه بازگشت به وبلاگ */}
+            {/* دکمه بازگشت */}
             <div className="mt-12">
               <Link
-                href="/blog"
+                href="/"
                 className="group inline-flex items-center gap-3 border-2 border-black bg-white hover:bg-black hover:text-white px-8 py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
                 style={{ fontFamily: "var(--font-doran)" }}
               >
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:-translate-x-1 text-[#c8ff00]" />
                 <span className="text-base font-black">
-                  بازگشت به لیست مقالات ❋
+                  بازگشت به صفحه اصلی ❋
                 </span>
               </Link>
             </div>
+
+            {/* کامنت‌ها */}
             <BlogComments postId={post.id} />
           </div>
-
         </div>
       </article>
     </main>
