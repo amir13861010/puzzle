@@ -11,7 +11,7 @@ import Script from "next/script";
 const doran = localFont({
   src: [
     {
-      path: "./fonts/doran/Doran-VF.ttf",
+      path: "../fonts/doran/Doran-VF.ttf",
       weight: "100 900",
       style: "normal",
     },
