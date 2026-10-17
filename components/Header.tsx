@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import MobileMenu from "@/components/MobileMenu";
 import BlogMegaMenu, { type BlogCategory } from "@/components/BlogMegaMenu";
@@ -38,14 +39,16 @@ export default function Header() {
             href="/"
             className="bg-neutral-100 text-black px-3 md:px-6 flex items-center gap-2 md:gap-3 shrink-0"
           >
-            <div className="w-7 h-7 md:w-10 md:h-10 bg-black flex items-center justify-center shrink-0">
-              <svg
-                viewBox="0 0 24 24"
-                className="w-3.5 h-3.5 md:w-5 md:h-5 text-white"
-                fill="currentColor"
-              >
-                <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-3 9h-3v3a1 1 0 11-2 0v-3H8a1 1 0 110-2h3V7a1 1 0 112 0v3h3a1 1 0 110 2z" />
-              </svg>
+            {/* جایگزین آیکون مثبت با لوگوی اصلی */}
+            <div className="relative w-7 h-7 md:w-10 md:h-10 bg-black border border-black overflow-hidden shrink-0">
+              <Image
+                src="/og-image.jpg"
+                alt="Puzzle Logo"
+                fill
+                sizes="(max-width: 768px) 28px, 40px"
+                className="object-cover"
+                priority
+              />
             </div>
             <div className="leading-none">
               <div className="text-sm md:text-xl font-black tracking-tight">
