@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpLeft, Asterisk, Store, FolderArchive } from "lucide-react";
+import { ArrowUpLeft, Asterisk, FolderArchive } from "lucide-react";
 
 export type BlogCategory = {
   id: string;
@@ -68,7 +68,7 @@ export default function BlogMegaMenu({
         <div className="p-6 md:p-8 max-h-[calc(100vh-200px)] overflow-y-auto">
           {categories.length === 0 ? (
             <div className="py-12 text-center text-neutral-500 font-mono text-sm border-2 border-dashed border-neutral-300">
-              // NO CATEGORIES FOUND //
+              {"// NO CATEGORIES FOUND //"}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
