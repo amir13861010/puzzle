@@ -52,7 +52,7 @@ export default function BlogMegaMenu({
         <div className="p-6 md:p-8 max-h-[calc(100vh-160px)] overflow-y-auto">
           {categories.length === 0 ? (
             <div className="py-10 text-center text-neutral-400 font-mono text-xs border border-dashed border-neutral-200">
-              // NO CATEGORIES //
+              {/* NO CATEGORIES */}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
