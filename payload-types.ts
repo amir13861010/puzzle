@@ -271,6 +271,7 @@ export interface Coach {
 export interface Course {
   id: string;
   slug: string;
+  type: 'puzzle' | 'club';
   number: string;
   title_fa: string;
   title_en: string;
@@ -283,7 +284,24 @@ export interface Course {
   image?: string | null;
   tag?: string | null;
   description?: string | null;
-  full_description?: string | null;
+  /**
+   * برای متن، لینک، جدول و تصویر از ادیتور استفاده کنید.
+   */
+  full_description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   sort_order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -774,6 +792,7 @@ export interface CoachesSelect<T extends boolean = true> {
  */
 export interface CoursesSelect<T extends boolean = true> {
   slug?: T;
+  type?: T;
   number?: T;
   title_fa?: T;
   title_en?: T;

@@ -15,7 +15,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import EventsGallery from "@/components/sections/EventsGallery";
 import BooksGallery from "@/components/sections/BooksGallery";
 import Partners from "@/components/sections/Partners";
-import CourseItem from "@/components/sections/CourseItem";
+import CoursesSection from "@/components/sections/CoursesSection";
 import ProductItem from "@/components/sections/ProductItem";
 import CoachingSection from "@/components/sections/CoachingSection";
 import TributeSection from "@/components/sections/TributeSection";
@@ -60,6 +60,8 @@ export default async function Home() {
     <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans relative">
       <HeroSection />
 
+      <CoursesSection courses={courses} />
+
       {layoutItems.map((item, index) => {
         switch (item.type) {
           case "events_gallery":
@@ -69,36 +71,7 @@ export default async function Home() {
             return <BooksGallery key={item.id} images={bookImages} />;
 
           case "course": {
-            const course: Course | undefined = courses[item.source ?? 0];
-            if (!course) return null;
-            return (
-              <section
-                key={item.id}
-                className="bg-white text-black relative overflow-hidden"
-                dir="rtl"
-              >
-                <div className="border-b-2 border-black relative overflow-hidden">
-                  <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
-                    <div
-                      className="absolute -top-[15%] -right-[5%] text-black/[0.03] font-black text-[18vw] leading-none whitespace-nowrap uppercase"
-                      style={{ fontFamily: "var(--font-display)" }}
-                    >
-                      MASTERCLASS
-                    </div>
-                    <div
-                      className="absolute bottom-4 left-10 text-black/[0.025] font-black text-[10vw] leading-none whitespace-nowrap"
-                      style={{ fontFamily: "var(--font-doran)" }}
-                    >
-                      آموزش تخصصی
-                    </div>
-                  </div>
-
-                  <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24 relative z-10">
-                    <CourseItem course={course} />
-                  </div>
-                </div>
-              </section>
-            );
+            return null;
           }
 
           case "product": {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Course } from "@/lib/data";
+import CourseTypeBadge from "@/components/CourseTypeBadge";
 
 export default function CourseItem({ course }: { course: Course }) {
   return (
@@ -22,11 +23,13 @@ export default function CourseItem({ course }: { course: Course }) {
                 NO IMG
               </div>
             )}
-            <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1 bg-[#c8ff00] text-black border border-black">
-              <span className="w-1.5 h-1.5 bg-black rounded-full" />
-              <span className="text-[10px] font-mono tracking-widest uppercase font-bold">
-                دوره — {course.tag}
-              </span>
+            <div className="absolute top-3 left-3 flex items-center gap-2">
+              <CourseTypeBadge type={course.type} />
+              {course.tag && (
+                <span className="bg-black text-white border border-black px-2 py-0.5 text-[10px] font-mono font-bold">
+                  {course.tag}
+                </span>
+              )}
             </div>
           </Link>
         </div>

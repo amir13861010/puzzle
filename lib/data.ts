@@ -15,6 +15,7 @@ export type Product = {
 export type Course = {
   id: string;
   slug: string;
+  type?: "puzzle" | "club";
   number: string;
   title_fa: string;
   title_en: string;
@@ -27,7 +28,7 @@ export type Course = {
   image: string | null;
   tag: string | null;
   description: string | null;
-  full_description: string | null;
+  full_description: unknown | null;
   sort_order: number;
   createdAt: string;
   updatedAt: string;
@@ -167,14 +168,20 @@ export async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-export async function getCourses(): Promise<Course[]> {
+export async function getCourses(
+  type?: "puzzle" | "club"
+): Promise<Course[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "courses",
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as Course[];
+  const courses = (result.docs as unknown as Course[]).map((course) => ({
+    ...course,
+    type: course.type ?? "puzzle",
+  }));
+  return type ? courses.filter((course) => course.type === type) : courses;
 }
 
 export async function getCourse(slug: string): Promise<Course | null> {
@@ -184,7 +191,8 @@ export async function getCourse(slug: string): Promise<Course | null> {
     where: { slug: { equals: slug } },
     limit: 1,
   });
-  return (result.docs[0] as unknown as Course) ?? null;
+  const course = (result.docs[0] as unknown as Course) ?? null;
+  return course ? { ...course, type: course.type ?? "puzzle" } : null;
 }
 
 export async function getCategories(): Promise<Category[]> {

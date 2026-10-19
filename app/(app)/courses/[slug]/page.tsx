@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getCourse, getCourses } from "@/lib/data";
 import CourseActions from "./CourseActions";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
 
@@ -197,16 +198,16 @@ export default async function CoursePage({
                 </h2>
               </div>
               <div className="md:col-span-9">
-                <p
-                  className="text-neutral-700 whitespace-pre-line"
-                  style={{
-                    fontFamily: "var(--font-doran)",
-                    fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)",
-                    lineHeight: "2.1",
-                  }}
+                <div
+                  className="text-neutral-700 prose prose-neutral max-w-none prose-p:leading-[2.1] prose-a:text-blue-700 prose-a:underline prose-img:max-w-full prose-table:w-full prose-table:border-collapse prose-td:border prose-td:border-black/20 prose-td:p-2 prose-th:border prose-th:border-black/20 prose-th:bg-black/5 prose-th:p-2"
+                  style={{ fontFamily: "var(--font-doran)", fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)" }}
                 >
-                  {course.full_description}
-                </p>
+                  {typeof course.full_description === "string" ? (
+                    <p className="whitespace-pre-line">{course.full_description}</p>
+                  ) : (
+                    <RichText data={course.full_description as never} />
+                  )}
+                </div>
               </div>
             </div>
           </div>

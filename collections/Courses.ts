@@ -13,6 +13,17 @@ export const Courses: CollectionConfig = {
       unique: true,
     },
     {
+      name: "type",
+      type: "select",
+      label: "نوع دوره",
+      required: true,
+      defaultValue: "puzzle",
+      options: [
+        { label: "پازل", value: "puzzle" },
+        { label: "باشگاه", value: "club" },
+      ],
+    },
+    {
       name: "number",
       type: "text",
       required: true,
@@ -67,7 +78,11 @@ export const Courses: CollectionConfig = {
     },
     {
       name: "full_description",
-      type: "textarea",
+      type: "richText",
+      label: "توضیحات بیشتر",
+      admin: {
+        description: "برای متن، لینک، جدول و تصویر از ادیتور استفاده کنید.",
+      },
     },
     {
       name: "sort_order",
