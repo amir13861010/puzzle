@@ -9,7 +9,6 @@ import {
   getTestimonials,
   getPartners,
   getSectionLayout,
-  type Course,
 } from "@/lib/data";
 import HeroSection from "@/components/sections/HeroSection";
 import EventsGallery from "@/components/sections/EventsGallery";
@@ -62,7 +61,7 @@ export default async function Home() {
 
       <CoursesSection courses={courses} />
 
-      {layoutItems.map((item, index) => {
+      {layoutItems.map((item) => {
         switch (item.type) {
           case "events_gallery":
             return <EventsGallery key={item.id} images={eventImages} />;

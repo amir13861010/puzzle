@@ -1,4 +1,5 @@
 import { getPayloadClient } from "./payload";
+import type { SerializedEditorState } from "lexical";
 
 // ============ تایپ‌ها ============
 export type Product = {
@@ -28,7 +29,7 @@ export type Course = {
   image: string | null;
   tag: string | null;
   description: string | null;
-  full_description: unknown | null;
+  full_description: string | SerializedEditorState | null;
   sort_order: number;
   createdAt: string;
   updatedAt: string;

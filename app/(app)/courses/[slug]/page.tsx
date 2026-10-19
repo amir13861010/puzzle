@@ -205,7 +205,7 @@ export default async function CoursePage({
                   {typeof course.full_description === "string" ? (
                     <p className="whitespace-pre-line">{course.full_description}</p>
                   ) : (
-                    <RichText data={course.full_description as never} />
+                    <RichText data={course.full_description} />
                   )}
                 </div>
               </div>
