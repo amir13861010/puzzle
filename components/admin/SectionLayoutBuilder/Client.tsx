@@ -80,11 +80,8 @@ export function SectionLayoutBuilderClient({
     try {
       const result = await updateSectionOrder(
         [
-          ...items.map((s, i) => ({ id: s.id, _order: i })),
-          ...hiddenSectionIds.map((id, i) => ({
-            id,
-            _order: items.length + i,
-          })),
+          ...items.map((section) => section.id),
+          ...hiddenSectionIds,
         ]
       );
       if (result?.error) {

@@ -2,23 +2,19 @@
 import { getPayloadClient } from "../payload";
 import { getCourses } from "../data";
 import { revalidatePath } from "next/cache";
+import { generateNKeysBetween } from "payload/shared";
 
 export async function updateSectionOrder(
-  items: Array<{ id: string; _order: number }>
+  orderedIds: string[]
 ) {
   const payload = await getPayloadClient();
 
   if (
-    !Array.isArray(items) ||
-    items.some((item) => !item || typeof item.id !== "string" || !Number.isInteger(item._order)) ||
-    new Set(items.map((item) => item.id)).size !== items.length
+    !Array.isArray(orderedIds) ||
+    orderedIds.some((id) => typeof id !== "string" || id.length === 0) ||
+    new Set(orderedIds).size !== orderedIds.length
   ) {
     return { error: "ترتیب ارسالی معتبر نیست" };
-  }
-
-  const sortedItems = [...items].sort((a, b) => a._order - b._order);
-  if (sortedItems.some((item, index) => item._order !== index)) {
-    return { error: "ترتیب سکشن‌ها باید پیوسته باشد" };
   }
 
   const pool = (
@@ -43,11 +39,15 @@ export async function updateSectionOrder(
       const { rows } = await client.query(
         `SELECT id FROM section_layout ORDER BY _order ASC FOR UPDATE`,
       ) as { rows: Array<{ id: string }> };
-      if (rows.length !== sortedItems.length || rows.some((row) => !sortedItems.some((item) => item.id === row.id))) {
+      const submittedIds = new Set(orderedIds);
+      if (rows.length !== orderedIds.length || rows.some((row) => !submittedIds.has(row.id))) {
         throw new Error("فهرست سکشن‌ها تغییر کرده؛ صفحه را تازه‌سازی کنید");
       }
-      for (const item of sortedItems) {
-        await client.query(`UPDATE section_layout SET _order = $1 WHERE id = $2`, [item._order, item.id]);
+      // Payload orderable fields are fractional text keys. Integer strings can
+      // sort lexicographically and conflict with keys generated for new rows.
+      const keys = generateNKeysBetween(null, null, orderedIds.length);
+      for (let index = 0; index < orderedIds.length; index++) {
+        await client.query(`UPDATE section_layout SET _order = $1 WHERE id = $2`, [keys[index], orderedIds[index]]);
       }
       await client.query("COMMIT");
     } catch (err) {
