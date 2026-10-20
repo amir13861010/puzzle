@@ -22,9 +22,13 @@ export type Section = {
   id: string;
   type: string;
   source?: number | null;
+  courseTitle?: string;
+  courseNumber?: string;
   is_visible: boolean;
   _order?: number | null;
 };
+
+type CourseChoice = { source: number; title: string; number: string };
 
 const SECTION_LABELS: Record<string, string> = {
   events_gallery: "گالری ایونت‌ها",
@@ -56,54 +60,72 @@ const SECTION_COLORS: Record<string, string> = {
 
 export function SectionLayoutBuilderClient({
   initialSections,
+  hiddenSectionIds,
+  availableCourses,
 }: {
   initialSections: Section[];
+  hiddenSectionIds: string[];
+  availableCourses: CourseChoice[];
 }) {
   const [sections, setSections] = useState(initialSections);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function saveOrder(items: Section[]) {
+  async function saveOrder(items: Section[]): Promise<boolean> {
     setSaving(true);
     setSaved(false);
     setError(null);
 
-    const result = await updateSectionOrder(
-      items.map((s, i) => ({ id: s.id, _order: i }))
-    );
-
-    setSaving(false);
-
-    if (result?.error) {
-      setError(result.error);
-      return;
+    try {
+      const result = await updateSectionOrder(
+        [
+          ...items.map((s, i) => ({ id: s.id, _order: i })),
+          ...hiddenSectionIds.map((id, i) => ({
+            id,
+            _order: items.length + i,
+          })),
+        ]
+      );
+      if (result?.error) {
+        setError(result.error);
+        return false;
+      }
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+      return true;
+    } catch {
+      setError("ذخیره ترتیب انجام نشد؛ دوباره تلاش کنید");
+      return false;
+    } finally {
+      setSaving(false);
     }
-
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
   }
 
   async function moveUp(index: number) {
-    if (index === 0) return;
+    if (saving || index === 0) return;
+    const previous = sections;
     const newSections = [...sections];
     [newSections[index - 1], newSections[index]] = [
       newSections[index],
       newSections[index - 1],
     ];
     setSections(newSections);
-    await saveOrder(newSections);
+    const result = await saveOrder(newSections);
+    if (!result) setSections(previous);
   }
 
   async function moveDown(index: number) {
-    if (index === sections.length - 1) return;
+    if (saving || index === sections.length - 1) return;
+    const previous = sections;
     const newSections = [...sections];
     [newSections[index], newSections[index + 1]] = [
       newSections[index + 1],
       newSections[index],
     ];
     setSections(newSections);
-    await saveOrder(newSections);
+    const result = await saveOrder(newSections);
+    if (!result) setSections(previous);
   }
 
   async function handleToggle(id: string, current: boolean) {
@@ -116,13 +138,20 @@ export function SectionLayoutBuilderClient({
 
   async function handleDelete(id: string) {
     if (!confirm("مطمئنی می‌خوای حذف کنی؟")) return;
-    const newSections = sections.filter((s) => s.id !== id);
-    setSections(newSections);
-    await deleteSection(id);
+    const result = await deleteSection(id);
+    if (result?.error) {
+      setError(result.error);
+      return;
+    }
+    window.location.reload();
   }
 
   async function handleAdd(type: string, source?: number) {
-    await addSection(type, source);
+    const result = await addSection(type, source);
+    if (result?.error) {
+      setError(result.error);
+      return;
+    }
     window.location.reload();
   }
 
@@ -155,7 +184,7 @@ export function SectionLayoutBuilderClient({
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className={`space-y-2 ${saving ? "pointer-events-none opacity-70" : ""}`}>
         {sections.map((section, index) => (
           <SectionItem
             key={section.id}
@@ -175,14 +204,26 @@ export function SectionLayoutBuilderClient({
           افزودن سکشن جدید:
         </div>
         <div className="flex flex-wrap gap-2">
-          {Object.entries(SECTION_LABELS).map(([type, label]) => (
+          {Object.entries(SECTION_LABELS)
+            .filter(([type]) => type !== "course")
+            .map(([type, label]) => (
+              <button
+                key={type}
+                onClick={() => handleAdd(type)}
+                className="flex items-center gap-1.5 text-xs border border-black/20 hover:bg-black hover:text-white px-3 py-1.5 transition-colors"
+              >
+                <Plus className="w-3 h-3" />
+                {label}
+              </button>
+            ))}
+          {availableCourses.map((course) => (
             <button
-              key={type}
-              onClick={() => handleAdd(type)}
+              key={`course-${course.source}`}
+              onClick={() => handleAdd("course", course.source)}
               className="flex items-center gap-1.5 text-xs border border-black/20 hover:bg-black hover:text-white px-3 py-1.5 transition-colors"
             >
               <Plus className="w-3 h-3" />
-              {label}
+              {`دوره ${course.title}`}
             </button>
           ))}
         </div>
@@ -208,7 +249,10 @@ function SectionItem({
   onToggle: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
 }) {
-  const label = SECTION_LABELS[section.type] || section.type;
+  const label =
+    section.type === "course" && section.courseTitle
+      ? `دوره ${section.courseTitle}`
+      : SECTION_LABELS[section.type] || section.type;
   const color = SECTION_COLORS[section.type] || "#c8ff00";
 
   const isFirst = index === 0;
@@ -249,11 +293,14 @@ function SectionItem({
         <div className="flex-1 min-w-0">
           <div className="font-black text-black text-sm md:text-base">
             {label}
-            {section.source != null && ` ${section.source + 1}`}
+            {section.type !== "course" && section.source != null &&
+              ` ${section.source + 1}`}
           </div>
           <div className="font-mono text-[10px] tracking-widest uppercase text-neutral-500 truncate">
             {section.type}
-            {section.source != null && ` · #${section.source}`}
+            {section.type === "course"
+              ? ` · شماره ${section.courseNumber}`
+              : section.source != null && ` · #${section.source}`}
           </div>
         </div>
 

@@ -14,7 +14,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import EventsGallery from "@/components/sections/EventsGallery";
 import BooksGallery from "@/components/sections/BooksGallery";
 import Partners from "@/components/sections/Partners";
-import CoursesSection from "@/components/sections/CoursesSection";
+import CourseItem from "@/components/sections/CourseItem";
 import ProductItem from "@/components/sections/ProductItem";
 import CoachingSection from "@/components/sections/CoachingSection";
 import TributeSection from "@/components/sections/TributeSection";
@@ -54,12 +54,11 @@ export default async function Home() {
   const bookImages = gallery.filter((g) => g.category === "books");
 
   const layoutItems = layout ?? [];
+  const renderedCourseIds = new Set<string>();
 
   return (
     <main className="bg-[#f5f5f5] text-black overflow-x-hidden selection:bg-[#c8ff00] selection:text-black font-sans relative">
       <HeroSection />
-
-      <CoursesSection courses={courses} />
 
       {layoutItems.map((item) => {
         switch (item.type) {
@@ -70,7 +69,25 @@ export default async function Home() {
             return <BooksGallery key={item.id} images={bookImages} />;
 
           case "course": {
-            return null;
+            const course = courses[item.source ?? 0];
+            if (!course || renderedCourseIds.has(course.id)) return null;
+            renderedCourseIds.add(course.id);
+            return (
+              <section
+                key={item.id}
+                className="bg-white text-black relative overflow-hidden"
+                dir="rtl"
+              >
+                <div className="border-b-2 border-black">
+                  <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-16 md:py-24">
+                    <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/50 mb-8">
+                      COURSE · {course.number}
+                    </p>
+                    <CourseItem course={course} />
+                  </div>
+                </div>
+              </section>
+            );
           }
 
           case "product": {

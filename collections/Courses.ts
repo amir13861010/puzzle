@@ -78,11 +78,7 @@ export const Courses: CollectionConfig = {
     },
     {
       name: "full_description",
-      type: "richText",
-      label: "توضیحات بیشتر",
-      admin: {
-        description: "برای متن، لینک، جدول و تصویر از ادیتور استفاده کنید.",
-      },
+      type: "textarea",
     },
     {
       name: "sort_order",

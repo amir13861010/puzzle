@@ -284,24 +284,7 @@ export interface Course {
   image?: string | null;
   tag?: string | null;
   description?: string | null;
-  /**
-   * برای متن، لینک، جدول و تصویر از ادیتور استفاده کنید.
-   */
-  full_description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  full_description?: string | null;
   sort_order?: number | null;
   updatedAt: string;
   createdAt: string;

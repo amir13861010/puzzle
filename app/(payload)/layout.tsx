@@ -1,4 +1,5 @@
 import config from "@payload-config";
+import "./admin-tailwind.css";
 import "@payloadcms/next/css";
 import type { ServerFunctionClient } from "payload";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";

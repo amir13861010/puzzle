@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     description: "جامعه‌ای غیررسمی، منتقد و رو به رشد برای مدیران محصول.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.svg",
         width: 1200,
         height: 630,
         alt: "پازل",
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "پازل",
     description: "جامعه‌ای برای سازندگان جسور",
-    images: ["/og-image.jpg"],
+    images: ["/og-image.svg"],
   },
   robots: {
     index: true,
@@ -92,9 +92,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/og-image.jpg", type: "image/jpeg" }],
-    shortcut: "/og-image.jpg",
-    apple: "/og-image.jpg",
+    icon: [{ url: "/og-image.svg", type: "image/jpeg" }],
+    shortcut: "/og-image.svg",
+    apple: "/og-image.svg",
   },
 };
 

@@ -42,7 +42,7 @@ export default function Header() {
           >
             <div className="relative w-6 h-6 md:w-8 md:h-8 bg-black border border-black overflow-hidden shrink-0">
               <Image
-                src="/og-image.jpg"
+                src="/og-image.svg"
                 alt="Puzzle Logo"
                 fill
                 sizes="32px"

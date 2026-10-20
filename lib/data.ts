@@ -178,10 +178,16 @@ export async function getCourses(
     limit: 100,
     sort: "sort_order",
   });
-  const courses = (result.docs as unknown as Course[]).map((course) => ({
-    ...course,
-    type: course.type ?? "puzzle",
-  }));
+  const courses = (result.docs as unknown as Course[])
+    .map((course) => ({
+      ...course,
+      type: course.type ?? "puzzle",
+    }))
+    .sort(
+      (a, b) =>
+        (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
+        String(a.id).localeCompare(String(b.id))
+    );
   return type ? courses.filter((course) => course.type === type) : courses;
 }
 
@@ -301,7 +307,7 @@ export async function getSectionLayout(): Promise<SectionLayoutItem[]> {
     collection: "section_layout",
     where: { is_visible: { equals: true } },
     limit: 100,
-    sort: "sort_order",
+    sort: "_order",
   });
   return result.docs as unknown as SectionLayoutItem[];
 }
