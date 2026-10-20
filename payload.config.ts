@@ -42,7 +42,7 @@ const mediaUploadProgressPlugin: Plugin = (config) => {
         "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler",
       ),
   );
-  if (blobProvider && providers) {
+  if (typeof blobProvider === "object" && blobProvider !== null && providers) {
     providers.push({
       ...blobProvider,
       path: path.resolve(dirname, "components/admin/MediaUploadProgressProvider"),
