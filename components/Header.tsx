@@ -40,7 +40,7 @@ export default function Header() {
             href="/"
             className="bg-neutral-100 text-black px-3 md:px-5 flex items-center gap-2.5 md:gap-3 shrink-0 hover:bg-white transition-colors"
           >
-            <div className="relative w-6 h-6 md:w-8 md:h-8 bg-black border border-black overflow-hidden shrink-0">
+            <div className="relative w-6 h-6 md:w-8 md:h-8 bg-white border border-black overflow-hidden shrink-0">
               <Image
                 src="/og-image.svg"
                 alt="Puzzle Logo"
