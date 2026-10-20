@@ -45,7 +45,7 @@ const mediaUploadProgressPlugin: Plugin = (config) => {
   if (typeof blobProvider === "object" && blobProvider !== null && providers) {
     providers.push({
       ...blobProvider,
-      path: path.resolve(dirname, "components/admin/MediaUploadProgressProvider"),
+      path: "./components/admin/MediaUploadProgressProvider",
     });
   }
   return config;
