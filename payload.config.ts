@@ -1,6 +1,6 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { EXPERIMENTAL_TableFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
-import { buildConfig } from "payload";
+import { buildConfig, type Plugin } from "payload";
 import path from "path";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
@@ -29,6 +29,27 @@ import { Comments } from "./collections/Comments";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+const mediaUploadProgressPlugin: Plugin = (config) => {
+  const providers = config.admin?.components?.providers;
+  const blobProvider = providers?.find(
+    (provider) =>
+      typeof provider === "object" &&
+      provider !== null &&
+      "path" in provider &&
+      typeof provider.path === "string" &&
+      provider.path.includes(
+        "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler",
+      ),
+  );
+  if (blobProvider && providers) {
+    providers.push({
+      ...blobProvider,
+      path: path.resolve(dirname, "components/admin/MediaUploadProgressProvider"),
+    });
+  }
+  return config;
+};
 
 export default buildConfig({
   admin: {
@@ -72,7 +93,9 @@ plugins: [
       media: true,
     },
     token: process.env.BLOB_READ_WRITE_TOKEN || "",
+    clientUploads: true,
   }),
+  mediaUploadProgressPlugin,
 ],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
