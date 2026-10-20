@@ -10,7 +10,7 @@ type ProviderProps = {
   collectionSlug: string;
   enabled?: boolean;
   prefix?: string;
-  serverHandlerPath: string;
+  serverHandlerPath: `/${string}`;
 };
 
 type UploadStatus = {
