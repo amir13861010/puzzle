@@ -138,11 +138,7 @@ export function SectionLayoutBuilderClient({
 
   async function handleDelete(id: string) {
     if (!confirm("مطمئنی می‌خوای حذف کنی؟")) return;
-    const result = await deleteSection(id);
-    if (result?.error) {
-      setError(result.error);
-      return;
-    }
+    await deleteSection(id);
     window.location.reload();
   }
 
