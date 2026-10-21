@@ -9,6 +9,7 @@ import {
 import Script from "next/script";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import Footer from "@/components/sections/Footer";
+import SupportButton from "@/components/SupportButton";
 import "../globals.css";
 
 const doran = localFont({
@@ -134,6 +135,7 @@ export default function RootLayout({
         <ConditionalHeader />
         {children}
         <Footer />
+        <SupportButton />
       </body>
     </html>
   );
