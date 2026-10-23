@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function saveHeadCoach(formData: FormData) {
@@ -57,7 +57,7 @@ export async function saveHeadCoach(formData: FormData) {
   const { error } = await supabase.from("head_coach").update(updates).eq("id", 1);
 
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/head-coach");
   revalidatePath("/");
   redirect("/admin/head-coach");

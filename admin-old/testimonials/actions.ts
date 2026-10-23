@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function saveTestimonial(formData: FormData) {
@@ -81,7 +81,7 @@ export async function saveTestimonial(formData: FormData) {
 
     if (error) return { error: error.message };
   }
-
+  revalidateTag("payload");
   revalidatePath("/admin/testimonials");
   revalidatePath("/");
   redirect("/admin/testimonials");
@@ -105,7 +105,7 @@ export async function deleteTestimonial(id: string, imageUrl: string | null) {
 
   const { error } = await supabase.from("testimonials").delete().eq("id", id);
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/testimonials");
   revalidatePath("/");
 }

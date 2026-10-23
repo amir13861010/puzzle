@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function updateLayoutOrder(
   items: Array<{ id: string; sort_order: number }>
@@ -22,7 +22,7 @@ export async function updateLayoutOrder(
 
     if (error) return { error: error.message };
   }
-
+  revalidateTag("payload");
   revalidatePath("/admin/layout");
   revalidatePath("/");
   return { success: true };
@@ -42,7 +42,7 @@ export async function toggleVisibility(id: string, isVisible: boolean) {
     .eq("id", id);
 
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/layout");
   revalidatePath("/");
   return { success: true };
@@ -80,7 +80,7 @@ export async function resetLayout() {
   const { error } = await supabase.from("section_layout").insert(defaults);
 
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/layout");
   revalidatePath("/");
   return { success: true };

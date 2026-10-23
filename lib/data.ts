@@ -1,5 +1,15 @@
 import { getPayloadClient } from "./payload";
+import { unstable_cache } from "next/cache";
 import type { SerializedEditorState } from "lexical";
+
+const cachePayloadQuery = <T extends (...args: any[]) => Promise<any>>(
+  key: string,
+  query: T,
+): T =>
+  unstable_cache(query, ["payload", key], {
+    revalidate: 60,
+    tags: ["payload", `payload-${key}`],
+  }) as T;
 
 // ============ تایپ‌ها ============
 export type Product = {
@@ -146,7 +156,7 @@ export type SectionLayoutItem = {
 
 // ============ توابع ============
 
-export async function getProducts(): Promise<Product[]> {
+async function loadProducts(): Promise<Product[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "products",
@@ -156,7 +166,7 @@ export async function getProducts(): Promise<Product[]> {
   return result.docs as unknown as Product[];
 }
 
-export async function getProduct(id: string): Promise<Product | null> {
+async function loadProduct(id: string): Promise<Product | null> {
   const payload = await getPayloadClient();
   try {
     const result = await payload.findByID({
@@ -169,7 +179,7 @@ export async function getProduct(id: string): Promise<Product | null> {
   }
 }
 
-export async function getCourses(
+async function loadCourses(
   type?: "puzzle" | "club"
 ): Promise<Course[]> {
   const payload = await getPayloadClient();
@@ -191,7 +201,7 @@ export async function getCourses(
   return type ? courses.filter((course) => course.type === type) : courses;
 }
 
-export async function getCourse(slug: string): Promise<Course | null> {
+async function loadCourse(slug: string): Promise<Course | null> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "courses",
@@ -202,7 +212,7 @@ export async function getCourse(slug: string): Promise<Course | null> {
   return course ? { ...course, type: course.type ?? "puzzle" } : null;
 }
 
-export async function getCategories(): Promise<Category[]> {
+async function loadCategories(): Promise<Category[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "categories",
@@ -212,7 +222,7 @@ export async function getCategories(): Promise<Category[]> {
   return result.docs as unknown as Category[];
 }
 
-export async function getGallery(): Promise<GalleryItem[]> {
+async function loadGallery(): Promise<GalleryItem[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "gallery",
@@ -222,7 +232,7 @@ export async function getGallery(): Promise<GalleryItem[]> {
   return result.docs as unknown as GalleryItem[];
 }
 
-export async function getGalleryByCategory(
+async function loadGalleryByCategory(
   category: "events" | "books"
 ): Promise<GalleryItem[]> {
   const payload = await getPayloadClient();
@@ -235,7 +245,7 @@ export async function getGalleryByCategory(
   return result.docs as unknown as GalleryItem[];
 }
 
-export async function getCoaches(): Promise<Coach[]> {
+async function loadCoaches(): Promise<Coach[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "coaches",
@@ -245,7 +255,7 @@ export async function getCoaches(): Promise<Coach[]> {
   return result.docs as unknown as Coach[];
 }
 
-export async function getCoaching(): Promise<Coaching[]> {
+async function loadCoaching(): Promise<Coaching[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "coaching",
@@ -254,7 +264,7 @@ export async function getCoaching(): Promise<Coaching[]> {
   return result.docs as unknown as Coaching[];
 }
 
-export async function getTribute(): Promise<Tribute | null> {
+async function loadTribute(): Promise<Tribute | null> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "tribute",
@@ -263,7 +273,7 @@ export async function getTribute(): Promise<Tribute | null> {
   return (result.docs[0] as unknown as Tribute) ?? null;
 }
 
-export async function getHeadCoach(): Promise<HeadCoach | null> {
+async function loadHeadCoach(): Promise<HeadCoach | null> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "head_coach",
@@ -272,7 +282,7 @@ export async function getHeadCoach(): Promise<HeadCoach | null> {
   return (result.docs[0] as unknown as HeadCoach) ?? null;
 }
 
-export async function getTestimonials(): Promise<Testimonial[]> {
+async function loadTestimonials(): Promise<Testimonial[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "testimonials",
@@ -282,7 +292,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   return result.docs as unknown as Testimonial[];
 }
 
-export async function getPartners(): Promise<Partner[]> {
+async function loadPartners(): Promise<Partner[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "partners",
@@ -292,7 +302,7 @@ export async function getPartners(): Promise<Partner[]> {
   return result.docs as unknown as Partner[];
 }
 
-export async function getSettings(): Promise<Settings | null> {
+async function loadSettings(): Promise<Settings | null> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "settings",
@@ -301,7 +311,7 @@ export async function getSettings(): Promise<Settings | null> {
   return (result.docs[0] as unknown as Settings) ?? null;
 }
 
-export async function getSectionLayout(): Promise<SectionLayoutItem[]> {
+async function loadSectionLayout(): Promise<SectionLayoutItem[]> {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "section_layout",
@@ -311,3 +321,19 @@ export async function getSectionLayout(): Promise<SectionLayoutItem[]> {
   });
   return result.docs as unknown as SectionLayoutItem[];
 }
+
+export const getProducts = cachePayloadQuery("products", loadProducts);
+export const getProduct = cachePayloadQuery("product", loadProduct);
+export const getCourses = cachePayloadQuery("courses", loadCourses);
+export const getCourse = cachePayloadQuery("course", loadCourse);
+export const getCategories = cachePayloadQuery("categories", loadCategories);
+export const getGallery = cachePayloadQuery("gallery", loadGallery);
+export const getGalleryByCategory = cachePayloadQuery("gallery-category", loadGalleryByCategory);
+export const getCoaches = cachePayloadQuery("coaches", loadCoaches);
+export const getCoaching = cachePayloadQuery("coaching", loadCoaching);
+export const getTribute = cachePayloadQuery("tribute", loadTribute);
+export const getHeadCoach = cachePayloadQuery("head-coach", loadHeadCoach);
+export const getTestimonials = cachePayloadQuery("testimonials", loadTestimonials);
+export const getPartners = cachePayloadQuery("partners", loadPartners);
+export const getSettings = cachePayloadQuery("settings", loadSettings);
+export const getSectionLayout = cachePayloadQuery("section-layout", loadSectionLayout);

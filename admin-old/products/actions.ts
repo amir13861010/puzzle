@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function saveProduct(formData: FormData) {
@@ -108,6 +108,7 @@ export async function saveProduct(formData: FormData) {
   }
 
   console.log("[saveProduct] ✅ SUCCESS!");
+  revalidateTag("payload");
   revalidatePath("/admin/products");
   revalidatePath("/store");
   redirect("/admin/products");
@@ -138,7 +139,7 @@ export async function deleteProduct(id: string) {
   const { error } = await supabase.from("products").delete().eq("id", id);
 
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/products");
   revalidatePath("/store");
 }

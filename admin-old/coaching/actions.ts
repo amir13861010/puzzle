@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function saveCoaching(formData: FormData) {
@@ -66,7 +66,7 @@ export async function saveCoaching(formData: FormData) {
 
     if (error) return { error: error.message };
   }
-
+  revalidateTag("payload");
   revalidatePath("/admin/coaching");
   revalidatePath("/");
   redirect("/admin/coaching");
@@ -89,7 +89,7 @@ export async function deleteCoaching(id: string, imageUrl: string) {
 
   const { error } = await supabase.from("coaching").delete().eq("id", id);
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/coaching");
   revalidatePath("/");
 }

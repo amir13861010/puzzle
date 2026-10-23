@@ -1,7 +1,7 @@
 "use server";
 import { getPayloadClient } from "../payload";
 import { getCourses } from "../data";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { generateNKeysBetween } from "payload/shared";
 
 export async function updateSectionOrder(
@@ -56,7 +56,7 @@ export async function updateSectionOrder(
     } finally {
       client.release();
     }
-
+    revalidateTag("payload");
     revalidatePath("/admin/section-layout");
     revalidatePath("/");
     return { success: true };
@@ -78,6 +78,7 @@ export async function toggleSectionVisibility(
     id,
     data: { is_visible: isVisible },
   });
+  revalidateTag("payload");
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };
@@ -89,6 +90,7 @@ export async function deleteSection(id: string) {
     collection: "section_layout",
     id,
   });
+  revalidateTag("payload");
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };
@@ -128,6 +130,7 @@ export async function addSection(type: string, source?: number) {
       is_visible: true,
     },
   });
+  revalidateTag("payload");
   revalidatePath("/admin/section-layout");
   revalidatePath("/");
   return { success: true };

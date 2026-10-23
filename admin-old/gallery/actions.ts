@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function saveGalleryImage(formData: FormData) {
@@ -55,7 +55,7 @@ export async function saveGalleryImage(formData: FormData) {
     await supabase.storage.from("gallery").remove([fileName]);
     return { error: dbError.message };
   }
-
+  revalidateTag("payload");
   revalidatePath("/admin/gallery");
   revalidatePath("/");
   redirect(`/admin/gallery?tab=${category}`);
@@ -80,7 +80,7 @@ export async function deleteGalleryImage(id: string, imageUrl: string) {
   const { error } = await supabase.from("gallery").delete().eq("id", id);
 
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/gallery");
   revalidatePath("/");
 }

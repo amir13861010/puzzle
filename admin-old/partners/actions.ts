@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function savePartner(formData: FormData) {
@@ -66,7 +66,7 @@ export async function savePartner(formData: FormData) {
 
     if (error) return { error: error.message };
   }
-
+  revalidateTag("payload");
   revalidatePath("/admin/partners");
   revalidatePath("/");
   redirect("/admin/partners");
@@ -91,7 +91,7 @@ export async function deletePartner(id: string, logoUrl: string | null) {
 
   const { error } = await supabase.from("partners").delete().eq("id", id);
   if (error) return { error: error.message };
-
+  revalidateTag("payload");
   revalidatePath("/admin/partners");
   revalidatePath("/");
 }
