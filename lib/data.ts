@@ -11,7 +11,7 @@ const cachePayloadQuery = <T extends CacheableQuery>(
   unstable_cache(query, ["payload", key], {
     revalidate: 60,
     tags: ["payload", `payload-${key}`],
-  }) as T;
+  }) as unknown as T;
 
 // ============ تایپ‌ها ============
 export type Product = {
