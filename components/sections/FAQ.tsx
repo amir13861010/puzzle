@@ -166,21 +166,23 @@ export default function FAQ() {
             </span>
           </div>
 
-          <a
-            href="/contact"
-            className="group inline-flex items-center gap-4 border-2 border-black bg-white hover:bg-black hover:text-white px-6 md:px-8 py-3.5 md:py-4 transition-all shadow-[4px_4px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-          >
-            <span
-              className="text-sm md:text-base font-bold"
-              style={{ fontFamily: "var(--font-doran)" }}
-            >
-              تماس با ما ❋
-            </span>
-            <span className="w-6 h-6 bg-[#c8ff00] flex items-center justify-center text-black text-xs font-bold group-hover:bg-white transition-colors">
-              ←
-            </span>
-          </a>
-        </div>
+              <a
+        href="https://t.me/puzzleio_ir"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group inline-flex items-center gap-4 md:gap-6 border-2 border-black bg-white hover:bg-black hover:text-white px-8 md:px-12 py-4 md:py-5 transition-all shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1.5 hover:translate-y-1.5"
+      >
+        <span
+          className="text-lg md:text-2xl font-black"
+          style={{ fontFamily: "var(--font-doran)" }}
+        >
+          تماس با ما ❋
+        </span>
+        <span className="w-8 h-8 md:w-10 md:h-10 bg-[#c8ff00] flex items-center justify-center text-black text-base md:text-lg font-bold group-hover:bg-white transition-colors">
+          ←
+        </span>
+      </a>
+              </div>
       </div>
     </section>
   );
