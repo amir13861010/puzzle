@@ -2,7 +2,9 @@ import { getPayloadClient } from "./payload";
 import { unstable_cache } from "next/cache";
 import type { SerializedEditorState } from "lexical";
 
-const cachePayloadQuery = <T extends (...args: any[]) => Promise<any>>(
+type CacheableQuery = (...args: never[]) => Promise<unknown>;
+
+const cachePayloadQuery = <T extends CacheableQuery>(
   key: string,
   query: T,
 ): T =>
