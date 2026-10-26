@@ -86,6 +86,7 @@ export interface Config {
     posts: Post;
     post_categories: PostCategory;
     comments: Comment;
+    cart_shares: CartShare;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -112,6 +113,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     post_categories: PostCategoriesSelect<false> | PostCategoriesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
+    cart_shares: CartSharesSelect<false> | CartSharesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -529,6 +531,37 @@ export interface Comment {
   createdAt: string;
 }
 /**
+ * گزارش کپی و اشتراک‌گذاری سبد خرید
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cart_shares".
+ */
+export interface CartShare {
+  id: string;
+  action: 'copy' | 'telegram' | 'whatsapp';
+  items: {
+    itemId: string;
+    itemType: 'product' | 'course';
+    name: string;
+    unitPrice: number;
+    quantity: number;
+    lineTotal: number;
+    id?: string | null;
+  }[];
+  total: number;
+  device?: {
+    deviceType?: string | null;
+    browser?: string | null;
+    operatingSystem?: string | null;
+    platform?: string | null;
+    language?: string | null;
+    timezone?: string | null;
+    screen?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -627,6 +660,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comments';
         value: string | Comment;
+      } | null)
+    | ({
+        relationTo: 'cart_shares';
+        value: string | CartShare;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -990,6 +1027,38 @@ export interface CommentsSelect<T extends boolean = true> {
   comment?: T;
   post?: T;
   approved?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cart_shares_select".
+ */
+export interface CartSharesSelect<T extends boolean = true> {
+  action?: T;
+  items?:
+    | T
+    | {
+        itemId?: T;
+        itemType?: T;
+        name?: T;
+        unitPrice?: T;
+        quantity?: T;
+        lineTotal?: T;
+        id?: T;
+      };
+  total?: T;
+  device?:
+    | T
+    | {
+        deviceType?: T;
+        browser?: T;
+        operatingSystem?: T;
+        platform?: T;
+        language?: T;
+        timezone?: T;
+        screen?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

@@ -26,6 +26,7 @@ import { PostCategories } from "./collections/PostCategories";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { Comments } from "./collections/Comments";
+import { CartShares } from "./collections/CartShares";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -78,6 +79,7 @@ export default buildConfig({
     Posts,
     PostCategories,
     Comments,
+    CartShares,
   ],
 plugins: [
   seoPlugin({

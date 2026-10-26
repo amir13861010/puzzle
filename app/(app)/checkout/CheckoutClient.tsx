@@ -49,22 +49,42 @@ export function CheckoutClient({ settings }: { settings: Settings }) {
     return lines.join("\n");
   }
 
+  function saveCartAction(action: "copy" | "telegram" | "whatsapp") {
+    const screen = `${window.screen.width}x${window.screen.height}`;
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    void fetch("/api/cart-share", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        action,
+        items: items.map(({ id, quantity }) => ({ id, quantity })),
+        device: { timezone, screen },
+      }),
+    }).catch(() => {
+      // ثبت گزارش نباید جلوی کپی یا اشتراک سفارش را بگیرد.
+    });
+  }
+
   function shareToTelegram() {
     const text = buildInvoiceText();
     const encodedText = encodeURIComponent(text);
     window.open(`${settings.telegram}?text=${encodedText}`, "_blank");
+    saveCartAction("telegram");
   }
 
   function shareToWhatsapp() {
     const text = buildInvoiceText();
     const encodedText = encodeURIComponent(text);
     window.open(`${settings.whatsapp}?text=${encodedText}`, "_blank");
+    saveCartAction("whatsapp");
   }
 
   async function copyInvoice() {
     const text = buildInvoiceText();
     try {
       await navigator.clipboard.writeText(text);
+      saveCartAction("copy");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

@@ -2,6 +2,11 @@ import type { CollectionConfig } from "payload";
 
 export const Media: CollectionConfig = {
   slug: "media",
+  // Files are used as public site images, so Payload's static file handler
+  // must allow anonymous reads as well as the Media document API.
+  access: {
+    read: () => true,
+  },
   upload: {
     adminThumbnail: "thumbnail",
     imageSizes: [
