@@ -2,7 +2,8 @@ import { getPayloadClient } from "./payload";
 import { unstable_cache } from "next/cache";
 import type { SerializedEditorState } from "lexical";
 
-type CacheableQuery = (...args: never[]) => Promise<unknown>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CacheableQuery = (...args: any[]) => Promise<unknown>;
 
 const cachePayloadQuery = <T extends CacheableQuery>(
   key: string,
