@@ -23,6 +23,13 @@ export const Coaches: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر مربی",
     },
     {
       name: "alt",

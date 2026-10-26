@@ -27,6 +27,14 @@ export const Products: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر محصول",
+      admin: { description: "تصویر را همین‌جا آپلود یا از مدیا انتخاب کن." },
     },
   ],
 };

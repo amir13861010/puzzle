@@ -67,6 +67,14 @@ export const Courses: CollectionConfig = {
     {
       name: "image",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "image_media",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر دوره",
+      admin: { description: "تصویر را همین‌جا آپلود یا از مدیا انتخاب کن." },
     },
     {
       name: "tag",

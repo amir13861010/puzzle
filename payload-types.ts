@@ -246,6 +246,10 @@ export interface Product {
   description?: string | null;
   category?: string | null;
   image_url?: string | null;
+  /**
+   * تصویر را همین‌جا آپلود یا از مدیا انتخاب کن.
+   */
+  image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -260,6 +264,7 @@ export interface Coach {
   role?: string | null;
   description?: string | null;
   image_url?: string | null;
+  image?: (string | null) | Media;
   alt?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -282,6 +287,10 @@ export interface Course {
   price: number;
   price_display: string;
   image?: string | null;
+  /**
+   * تصویر را همین‌جا آپلود یا از مدیا انتخاب کن.
+   */
+  image_media?: (string | null) | Media;
   tag?: string | null;
   description?: string | null;
   full_description?: string | null;
@@ -298,6 +307,7 @@ export interface Partner {
   _order?: string | null;
   name: string;
   logo_url?: string | null;
+  logo?: (string | null) | Media;
   alt?: string | null;
   website_url?: string | null;
   updatedAt: string;
@@ -311,7 +321,8 @@ export interface Gallery {
   id: string;
   _order?: string | null;
   category: 'events' | 'books';
-  image_url: string;
+  image_url?: string | null;
+  image?: (string | null) | Media;
   alt?: string | null;
   title?: string | null;
   updatedAt: string;
@@ -323,7 +334,8 @@ export interface Gallery {
  */
 export interface Coaching {
   id: string;
-  image_url: string;
+  image_url?: string | null;
+  image?: (string | null) | Media;
   alt?: string | null;
   title?: string | null;
   description?: string | null;
@@ -337,6 +349,7 @@ export interface Coaching {
 export interface Tribute {
   id: string;
   image_url?: string | null;
+  image?: (string | null) | Media;
   alt?: string | null;
   title?: string | null;
   description?: string | null;
@@ -350,6 +363,7 @@ export interface Tribute {
 export interface HeadCoach {
   id: string;
   image_url?: string | null;
+  image?: (string | null) | Media;
   alt?: string | null;
   title?: string | null;
   name?: string | null;
@@ -370,6 +384,7 @@ export interface Testimonial {
   role?: string | null;
   quote?: string | null;
   image_url?: string | null;
+  image?: (string | null) | Media;
   video_url?: string | null;
   alt?: string | null;
   updatedAt: string;
@@ -752,6 +767,7 @@ export interface ProductsSelect<T extends boolean = true> {
   description?: T;
   category?: T;
   image_url?: T;
+  image?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -765,6 +781,7 @@ export interface CoachesSelect<T extends boolean = true> {
   role?: T;
   description?: T;
   image_url?: T;
+  image?: T;
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -786,6 +803,7 @@ export interface CoursesSelect<T extends boolean = true> {
   price?: T;
   price_display?: T;
   image?: T;
+  image_media?: T;
   tag?: T;
   description?: T;
   full_description?: T;
@@ -801,6 +819,7 @@ export interface PartnersSelect<T extends boolean = true> {
   _order?: T;
   name?: T;
   logo_url?: T;
+  logo?: T;
   alt?: T;
   website_url?: T;
   updatedAt?: T;
@@ -814,6 +833,7 @@ export interface GallerySelect<T extends boolean = true> {
   _order?: T;
   category?: T;
   image_url?: T;
+  image?: T;
   alt?: T;
   title?: T;
   updatedAt?: T;
@@ -825,6 +845,7 @@ export interface GallerySelect<T extends boolean = true> {
  */
 export interface CoachingSelect<T extends boolean = true> {
   image_url?: T;
+  image?: T;
   alt?: T;
   title?: T;
   description?: T;
@@ -837,6 +858,7 @@ export interface CoachingSelect<T extends boolean = true> {
  */
 export interface TributeSelect<T extends boolean = true> {
   image_url?: T;
+  image?: T;
   alt?: T;
   title?: T;
   description?: T;
@@ -849,6 +871,7 @@ export interface TributeSelect<T extends boolean = true> {
  */
 export interface HeadCoachSelect<T extends boolean = true> {
   image_url?: T;
+  image?: T;
   alt?: T;
   title?: T;
   name?: T;
@@ -868,6 +891,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   role?: T;
   quote?: T;
   image_url?: T;
+  image?: T;
   video_url?: T;
   alt?: T;
   updatedAt?: T;

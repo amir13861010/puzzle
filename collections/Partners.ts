@@ -15,6 +15,13 @@ export const Partners: CollectionConfig = {
     {
       name: "logo_url",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "logo",
+      type: "upload",
+      relationTo: "media",
+      label: "لوگوی همکار",
     },
     {
       name: "alt",

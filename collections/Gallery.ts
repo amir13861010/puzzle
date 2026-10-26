@@ -19,7 +19,13 @@ export const Gallery: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
-      required: true,
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر گالری",
     },
     {
       name: "alt",

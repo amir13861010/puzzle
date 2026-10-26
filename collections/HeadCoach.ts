@@ -9,6 +9,13 @@ export const HeadCoach: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر مربی ارشد",
     },
     {
       name: "alt",

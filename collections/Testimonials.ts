@@ -32,6 +32,13 @@ export const Testimonials: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر",
     },
     {
       name: "video_url",

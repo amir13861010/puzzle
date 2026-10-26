@@ -9,7 +9,13 @@ export const Coaching: CollectionConfig = {
     {
       name: "image_url",
       type: "text",
-      required: true,
+      admin: { hidden: true },
+    },
+    {
+      name: "image",
+      type: "upload",
+      relationTo: "media",
+      label: "تصویر",
     },
     {
       name: "alt",

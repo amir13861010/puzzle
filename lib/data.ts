@@ -13,6 +13,12 @@ const cachePayloadQuery = <T extends CacheableQuery>(
     tags: ["payload", `payload-${key}`],
   }) as unknown as T;
 
+const uploadedImageURL = (value: unknown): string | null => {
+  if (!value || typeof value !== "object") return null;
+  const url = (value as { url?: unknown }).url;
+  return typeof url === "string" ? url : null;
+};
+
 // ============ تایپ‌ها ============
 export type Product = {
   id: string;
@@ -165,7 +171,10 @@ async function loadProducts(): Promise<Product[]> {
     limit: 100,
     sort: "-createdAt",
   });
-  return result.docs as unknown as Product[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as Product & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadProduct(id: string): Promise<Product | null> {
@@ -175,7 +184,8 @@ async function loadProduct(id: string): Promise<Product | null> {
       collection: "products",
       id,
     });
-    return result as unknown as Product;
+    const product = result as unknown as Product & { image?: unknown };
+    return { ...product, image_url: uploadedImageURL(product.image) ?? product.image_url };
   } catch {
     return null;
   }
@@ -190,9 +200,10 @@ async function loadCourses(
     limit: 100,
     sort: "sort_order",
   });
-  const courses = (result.docs as unknown as Course[])
+  const courses = (result.docs as unknown as (Course & { image_media?: unknown })[])
     .map((course) => ({
       ...course,
+      image: uploadedImageURL(course.image_media) ?? course.image,
       type: course.type ?? "puzzle",
     }))
     .sort(
@@ -210,8 +221,14 @@ async function loadCourse(slug: string): Promise<Course | null> {
     where: { slug: { equals: slug } },
     limit: 1,
   });
-  const course = (result.docs[0] as unknown as Course) ?? null;
-  return course ? { ...course, type: course.type ?? "puzzle" } : null;
+  const course = (result.docs[0] as unknown as (Course & { image_media?: unknown })) ?? null;
+  return course
+    ? {
+        ...course,
+        image: uploadedImageURL(course.image_media) ?? course.image,
+        type: course.type ?? "puzzle",
+      }
+    : null;
 }
 
 async function loadCategories(): Promise<Category[]> {
@@ -231,7 +248,10 @@ async function loadGallery(): Promise<GalleryItem[]> {
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as GalleryItem[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as GalleryItem & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadGalleryByCategory(
@@ -244,7 +264,10 @@ async function loadGalleryByCategory(
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as GalleryItem[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as GalleryItem & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadCoaches(): Promise<Coach[]> {
@@ -254,7 +277,10 @@ async function loadCoaches(): Promise<Coach[]> {
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as Coach[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as Coach & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadCoaching(): Promise<Coaching[]> {
@@ -263,7 +289,10 @@ async function loadCoaching(): Promise<Coaching[]> {
     collection: "coaching",
     limit: 100,
   });
-  return result.docs as unknown as Coaching[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as Coaching & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadTribute(): Promise<Tribute | null> {
@@ -272,7 +301,8 @@ async function loadTribute(): Promise<Tribute | null> {
     collection: "tribute",
     limit: 1,
   });
-  return (result.docs[0] as unknown as Tribute) ?? null;
+  const item = (result.docs[0] as unknown as (Tribute & { image?: unknown })) ?? null;
+  return item ? { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url } : null;
 }
 
 async function loadHeadCoach(): Promise<HeadCoach | null> {
@@ -281,7 +311,8 @@ async function loadHeadCoach(): Promise<HeadCoach | null> {
     collection: "head_coach",
     limit: 1,
   });
-  return (result.docs[0] as unknown as HeadCoach) ?? null;
+  const item = (result.docs[0] as unknown as (HeadCoach & { image?: unknown })) ?? null;
+  return item ? { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url } : null;
 }
 
 async function loadTestimonials(): Promise<Testimonial[]> {
@@ -291,7 +322,10 @@ async function loadTestimonials(): Promise<Testimonial[]> {
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as Testimonial[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as Testimonial & { image?: unknown };
+    return { ...item, image_url: uploadedImageURL(item.image) ?? item.image_url };
+  });
 }
 
 async function loadPartners(): Promise<Partner[]> {
@@ -301,7 +335,10 @@ async function loadPartners(): Promise<Partner[]> {
     limit: 100,
     sort: "sort_order",
   });
-  return result.docs as unknown as Partner[];
+  return result.docs.map((doc) => {
+    const item = doc as unknown as Partner & { logo?: unknown };
+    return { ...item, logo_url: uploadedImageURL(item.logo) ?? item.logo_url };
+  });
 }
 
 async function loadSettings(): Promise<Settings | null> {
