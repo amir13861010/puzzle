@@ -28,6 +28,7 @@ import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { Comments } from "./collections/Comments";
 import { CartShares } from "./collections/CartShares";
 import { NewsletterSubscribers } from "./collections/NewsletterSubscribers";
+import { SEOSettings } from "./globals/SEOSettings";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -83,13 +84,14 @@ export default buildConfig({
     CartShares,
     NewsletterSubscribers,
   ],
+  globals: [SEOSettings],
 plugins: [
   seoPlugin({
-    collections: ["posts"],
+    collections: ["posts", "courses", "products"],
     uploadsCollection: "media",
     tabbedUI: true,
-    generateTitle: ({ doc }) => `${doc?.title} | پازل`,
-    generateDescription: ({ doc }) => doc?.excerpt || "",
+    generateTitle: ({ doc }) => `${doc?.title || doc?.title_fa || doc?.name || ""} | پازل`,
+    generateDescription: ({ doc }) => doc?.excerpt || doc?.description || "",
   }),
   vercelBlobStorage({
     enabled: true,

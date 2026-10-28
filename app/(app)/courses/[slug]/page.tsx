@@ -5,6 +5,7 @@ import { getCourse, getCourses } from "@/lib/data";
 import CourseActions from "./CourseActions";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import type { Metadata } from "next";
+import { getPayloadClient } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +13,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const course = await getCourse(slug);
   if (!course) return { title: "دوره پیدا نشد" };
-  const description = course.description?.trim() || `اطلاعات و ثبت‌نام دورهٔ ${course.title_fa} در پازل.`;
+  const payload = await getPayloadClient();
+  const result = await payload.find({ collection: "courses", where: { slug: { equals: slug } }, limit: 1 });
+  const meta = (result.docs[0] as unknown as { meta?: { title?: string; description?: string; image?: { url?: string } | string } } | undefined)?.meta;
+  const title = meta?.title?.trim() || course.title_fa;
+  const description = meta?.description?.trim() || course.description?.trim() || `اطلاعات و ثبت‌نام دورهٔ ${course.title_fa} در پازل.`;
   return {
-    title: course.title_fa,
+    title,
     description,
     keywords: [course.title_fa, course.title_en, course.topic, course.teacher_name, "دوره مدیریت محصول", "پازل"].filter(Boolean) as string[],
-    openGraph: { title: course.title_fa, description, type: "website" },
+    openGraph: { title, description, type: "website", images: meta?.image && typeof meta.image === "object" && meta.image.url ? [meta.image.url] : undefined },
     alternates: { canonical: `/courses/${slug}` },
   };
 }

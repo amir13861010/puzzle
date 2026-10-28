@@ -4,6 +4,7 @@ import { getProduct, getProducts, getCategories } from "@/lib/data";
 import { ChevronRight } from "lucide-react";
 import ProductActions from "./ProductActions";
 import type { Metadata } from "next";
+import { getPayloadClient } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +12,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const product = await getProduct(id);
   if (!product) return { title: "محصول پیدا نشد" };
-  const description = product.description?.trim() || `مشاهده و خرید ${product.name} از فروشگاه پازل.`;
+  const payload = await getPayloadClient();
+  const doc = await payload.findByID({ collection: "products", id, depth: 1 });
+  const meta = (doc as unknown as { meta?: { title?: string; description?: string; image?: { url?: string } | string } }).meta;
+  const title = meta?.title?.trim() || product.name;
+  const description = meta?.description?.trim() || product.description?.trim() || `مشاهده و خرید ${product.name} از فروشگاه پازل.`;
   return {
-    title: product.name,
+    title,
     description,
     keywords: [product.name, "فروشگاه پازل", "خرید محصول", "مدیریت محصول"],
-    openGraph: { title: product.name, description, type: "website", images: product.image_url ? [product.image_url] : undefined },
+    openGraph: { title, description, type: "website", images: meta?.image && typeof meta.image === "object" && meta.image.url ? [meta.image.url] : product.image_url ? [product.image_url] : undefined },
     alternates: { canonical: `/store/${id}` },
   };
 }

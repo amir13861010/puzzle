@@ -20,14 +20,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
   const post = posts.docs[0];
   if (!post) return { title: "مقاله پیدا نشد" };
-  const description = post.excerpt?.trim() || `مطالعهٔ مقالهٔ ${post.title} در مجلهٔ پازل.`;
+  const seo = (post as unknown as { meta?: { title?: string; description?: string; image?: { url?: string } | string } }).meta;
+  const title = seo?.title?.trim() || post.title;
+  const description = seo?.description?.trim() || post.excerpt?.trim() || `مطالعهٔ مقالهٔ ${post.title} در مجلهٔ پازل.`;
   const category = post.parentCategory && typeof post.parentCategory === "object" ? post.parentCategory.name : null;
-  const image = post.coverImage && typeof post.coverImage === "object" ? post.coverImage.url : null;
+  const seoImage = seo?.image && typeof seo.image === "object" ? seo.image.url : null;
+  const image = seoImage || (post.coverImage && typeof post.coverImage === "object" ? post.coverImage.url : null);
   return {
-    title: post.title,
+    title,
     description,
     keywords: [post.title, category, "مدیریت محصول", "طراحی محصول", "پازل"].filter(Boolean) as string[],
-    openGraph: { title: post.title, description, type: "article", images: image ? [image] : undefined },
+    openGraph: { title, description, type: "article", images: image ? [image] : undefined },
     alternates: { canonical: `/blog/${slug}` },
   };
 }
