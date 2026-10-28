@@ -1,3 +1,5 @@
+import NewsletterForm from "@/components/NewsletterForm";
+
 export default function Footer() {
   return (
     <footer
@@ -30,14 +32,14 @@ export default function Footer() {
                 className="text-4xl md:text-5xl font-black uppercase tracking-tighter inline-block border-r-4 border-[#c8ff00] pr-4"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                PUZZLE.CLUB
+                PUZZLEIO.IR
               </span>
               <p
                 className="text-base md:text-lg leading-relaxed text-neutral-400 font-light max-w-md pt-2"
                 style={{ fontFamily: "var(--font-doran)" }}
               >
                 جامعه‌ای غیررسمی، منتقد و رو به رشد برای مدیران محصول، دیزاینرها
-                و سازندگان جسور.
+                و سازندگان جسور. اینجا باشگاه مدیران محصول جوان است.
               </p>
             </div>
 
@@ -57,7 +59,10 @@ export default function Footer() {
                 { label: "رویدادها و میت‌آپ‌ها", href: "/events" },
                 { label: "دوره‌ها و بوت‌کمپ‌ها", href: "/courses" },
                 { label: "محصولات و ابزارها", href: "/store" },
-                { label: "کتاب‌خانه تخصصی", href: "/books" },
+                { label: "کتاب‌خانه تخصصی", href: "/#books" },
+                { label: "باشگاه", href: "/club" },
+                { label: "ارتباط با ما", href: "/contact" },
+                { label: "دربارهٔ ما", href: "/about" },
               ].map((item) => (
                 <li key={item.label}>
                   <a
@@ -81,7 +86,7 @@ export default function Footer() {
               </span>
               <div className="flex flex-wrap gap-x-8 gap-y-3 font-mono text-xs md:text-sm text-neutral-300">
                 <a
-                  href="https://t.me/"
+                  href="https://t.me/puzzle_modiarn_mahsol"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-8 hover:text-[#c8ff00] transition-colors"
@@ -89,7 +94,7 @@ export default function Footer() {
                   TELEGRAM ↗
                 </a>
                 <a
-                  href="https://linkedin.com/"
+                  href="https://www.linkedin.com/company/%D9%BE%D8%A7%D8%B2%D9%84/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-8 hover:text-[#c8ff00] transition-colors"
@@ -97,7 +102,7 @@ export default function Footer() {
                   LINKEDIN ↗
                 </a>
                 <a
-                  href="https://instagram.com/"
+                  href="https://www.instagram.com/puzzle_io/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-8 hover:text-[#c8ff00] transition-colors"
@@ -112,20 +117,7 @@ export default function Footer() {
               <span className="text-[11px] font-mono font-bold tracking-[0.3em] uppercase text-neutral-500 block">
                 [ 03 // DISPATCH ]
               </span>
-              <div className="bg-white/5 border border-white/10 p-6">
-                <h4 className="text-sm font-bold mb-4 font-mono">JOIN THE LIST</h4>
-                <input
-                  type="email"
-                  placeholder="EMAIL ADDRESS"
-                  className="w-full bg-transparent border-b-2 border-white/30 py-2 mb-4 focus:border-[#c8ff00] outline-none font-mono text-sm text-white placeholder:text-white/40"
-                />
-                <button
-                  type="button"
-                  className="w-full bg-[#c8ff00] text-black font-black py-3 px-4 uppercase hover:bg-white transition-all shadow-[4px_4px_0px_#fff] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-                >
-                  ثبت‌نام ❋
-                </button>
-              </div>
+              <NewsletterForm />
             </div>
           </div>
         </div>

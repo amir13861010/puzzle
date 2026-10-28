@@ -3,8 +3,23 @@ import Link from "next/link";
 import { getProduct, getProducts, getCategories } from "@/lib/data";
 import { ChevronRight } from "lucide-react";
 import ProductActions from "./ProductActions";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id);
+  if (!product) return { title: "محصول پیدا نشد" };
+  const description = product.description?.trim() || `مشاهده و خرید ${product.name} از فروشگاه پازل.`;
+  return {
+    title: product.name,
+    description,
+    keywords: [product.name, "فروشگاه پازل", "خرید محصول", "مدیریت محصول"],
+    openGraph: { title: product.name, description, type: "website", images: product.image_url ? [product.image_url] : undefined },
+    alternates: { canonical: `/store/${id}` },
+  };
+}
 
 export default async function ProductPage({
   params,

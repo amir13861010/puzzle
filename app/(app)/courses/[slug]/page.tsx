@@ -4,8 +4,23 @@ import Link from "next/link";
 import { getCourse, getCourses } from "@/lib/data";
 import CourseActions from "./CourseActions";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const course = await getCourse(slug);
+  if (!course) return { title: "دوره پیدا نشد" };
+  const description = course.description?.trim() || `اطلاعات و ثبت‌نام دورهٔ ${course.title_fa} در پازل.`;
+  return {
+    title: course.title_fa,
+    description,
+    keywords: [course.title_fa, course.title_en, course.topic, course.teacher_name, "دوره مدیریت محصول", "پازل"].filter(Boolean) as string[],
+    openGraph: { title: course.title_fa, description, type: "website" },
+    alternates: { canonical: `/courses/${slug}` },
+  };
+}
 
 export default async function CoursePage({
   params,

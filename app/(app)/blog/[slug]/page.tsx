@@ -5,8 +5,32 @@ import { RichText } from "@payloadcms/richtext-lexical/react";
 import { ArrowRight, Clock, Calendar, Asterisk } from "lucide-react";
 import BlogComments from "@/components/BlogComments";
 import ShareButton from "@/components/ShareButton";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const payload = await getPayloadClient();
+  const posts = await payload.find({
+    collection: "posts",
+    where: { slug: { equals: slug }, status: { equals: "published" } },
+    limit: 1,
+    depth: 1,
+  });
+  const post = posts.docs[0];
+  if (!post) return { title: "مقاله پیدا نشد" };
+  const description = post.excerpt?.trim() || `مطالعهٔ مقالهٔ ${post.title} در مجلهٔ پازل.`;
+  const category = post.parentCategory && typeof post.parentCategory === "object" ? post.parentCategory.name : null;
+  const image = post.coverImage && typeof post.coverImage === "object" ? post.coverImage.url : null;
+  return {
+    title: post.title,
+    description,
+    keywords: [post.title, category, "مدیریت محصول", "طراحی محصول", "پازل"].filter(Boolean) as string[],
+    openGraph: { title: post.title, description, type: "article", images: image ? [image] : undefined },
+    alternates: { canonical: `/blog/${slug}` },
+  };
+}
 
 export default async function BlogPostPage({
   params,

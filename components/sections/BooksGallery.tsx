@@ -16,6 +16,7 @@ export default function BooksGallery({
 
   return (
     <section
+      id="books"
       className="border-b-2 border-black bg-[#ededed] relative overflow-hidden"
       dir="rtl"
     >

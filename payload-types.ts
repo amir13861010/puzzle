@@ -87,6 +87,7 @@ export interface Config {
     post_categories: PostCategory;
     comments: Comment;
     cart_shares: CartShare;
+    newsletter_subscribers: NewsletterSubscriber;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -114,6 +115,7 @@ export interface Config {
     post_categories: PostCategoriesSelect<false> | PostCategoriesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     cart_shares: CartSharesSelect<false> | CartSharesSelect<true>;
+    newsletter_subscribers: NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -562,6 +564,18 @@ export interface CartShare {
   createdAt: string;
 }
 /**
+ * ایمیل‌های ثبت‌شده در خبرنامهٔ سایت
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter_subscribers".
+ */
+export interface NewsletterSubscriber {
+  id: string;
+  email: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -664,6 +678,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'cart_shares';
         value: string | CartShare;
+      } | null)
+    | ({
+        relationTo: 'newsletter_subscribers';
+        value: string | NewsletterSubscriber;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1059,6 +1077,15 @@ export interface CartSharesSelect<T extends boolean = true> {
         timezone?: T;
         screen?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter_subscribers_select".
+ */
+export interface NewsletterSubscribersSelect<T extends boolean = true> {
+  email?: T;
   updatedAt?: T;
   createdAt?: T;
 }

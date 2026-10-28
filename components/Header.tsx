@@ -137,7 +137,7 @@ export default function Header() {
           {/* بلوک ۵: شبکه‌های اجتماعی */}
           <div className="hidden md:flex items-stretch bg-neutral-100 text-black">
             <a
-              href="https://instagram.com/"
+              href="https://www.instagram.com/puzzle_io/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="اینستاگرام"
@@ -161,7 +161,7 @@ export default function Header() {
             </a>
 
             <a
-              href="https://linkedin.com/"
+              href="https://www.linkedin.com/company/%D9%BE%D8%A7%D8%B2%D9%84/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="لینکدین"
