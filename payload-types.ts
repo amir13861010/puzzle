@@ -125,8 +125,12 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'seo-settings': SeoSetting;
+  };
+  globalsSelect: {
+    'seo-settings': SeoSettingsSelect<false> | SeoSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -254,6 +258,14 @@ export interface Product {
    * تصویر را همین‌جا آپلود یا از مدیا انتخاب کن.
    */
   image?: (string | null) | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -299,6 +311,14 @@ export interface Course {
   description?: string | null;
   full_description?: string | null;
   sort_order?: number | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -823,6 +843,13 @@ export interface ProductsSelect<T extends boolean = true> {
   category?: T;
   image_url?: T;
   image?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -863,6 +890,13 @@ export interface CoursesSelect<T extends boolean = true> {
   description?: T;
   full_description?: T;
   sort_order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1128,6 +1162,61 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * متادیتا و تنظیمات پیش‌فرض نمایش سایت در موتورهای جست‌وجو و شبکه‌های اجتماعی.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-settings".
+ */
+export interface SeoSetting {
+  id: string;
+  siteName?: string | null;
+  title?: string | null;
+  /**
+   * %s با عنوان هر صفحه جایگزین می‌شود.
+   */
+  titleTemplate?: string | null;
+  description?: string | null;
+  /**
+   * کلمات را با ویرگول جدا کنید.
+   */
+  keywords?: string | null;
+  siteUrl?: string | null;
+  canonicalUrl?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  ogImage?: (string | null) | Media;
+  /**
+   * همراه با @ وارد کنید.
+   */
+  twitterHandle?: string | null;
+  allowIndexing?: boolean | null;
+  googleSiteVerification?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-settings_select".
+ */
+export interface SeoSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  title?: T;
+  titleTemplate?: T;
+  description?: T;
+  keywords?: T;
+  siteUrl?: T;
+  canonicalUrl?: T;
+  ogTitle?: T;
+  ogDescription?: T;
+  ogImage?: T;
+  twitterHandle?: T;
+  allowIndexing?: T;
+  googleSiteVerification?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
