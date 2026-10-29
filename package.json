@@ -6,8 +6,8 @@
   "packageManager": "pnpm@10.28.0",
   "scripts": {
     "dev": "next dev",
-    "build": "payload migrate && next build",
-    "migrate": "payload migrate",
+    "build": "payload migrate --force-accept-warning && next build",
+    "migrate": "payload migrate --force-accept-warning",
     "start": "next start",
     "lint": "eslint"
   },
