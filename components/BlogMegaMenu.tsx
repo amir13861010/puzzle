@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpLeft, FolderArchive } from "lucide-react";
+import { ArrowUpLeft } from "lucide-react";
 
 export type BlogCategory = {
   id: string;
@@ -11,6 +11,7 @@ export type BlogCategory = {
     id: string;
     name: string;
     slug: string;
+    posts: Array<{ id: string; title: string; slug: string }>;
   }>;
 };
 
@@ -73,51 +74,37 @@ export default function BlogMegaMenu({
                   </div>
 
                   {/* زیردسته‌ها */}
-                  <ul className="space-y-1">
+                  <div className="space-y-4">
                     {cat.children.length === 0 ? (
-                      <li className="font-mono text-[10px] text-neutral-300 py-0.5" dir="ltr">
+                      <p className="font-mono text-[10px] text-neutral-300 py-0.5" dir="ltr">
                         --
-                      </li>
+                      </p>
                     ) : (
                       cat.children.map((child) => (
-                        <li key={child.id}>
-                          <Link
-                            href={`/blog/category/${child.slug}`}
-                            className="group flex items-center justify-between py-1 text-xs text-neutral-600 hover:text-black transition-colors"
-                          >
-                            <span className="truncate group-hover:underline underline-offset-4 decoration-1">
-                              {child.name}
-                            </span>
-                            <ArrowUpLeft className="w-3 h-3 text-neutral-300 group-hover:text-black group-hover:-translate-x-0.5 transition-all shrink-0" />
-                          </Link>
-                        </li>
+                        <section key={child.id}>
+                          <h4 className="text-[11px] font-bold text-neutral-500 mb-1.5">{child.name}</h4>
+                          {child.posts.length ? (
+                            <ul className="space-y-1">
+                              {child.posts.map((post) => (
+                                <li key={post.id}>
+                                  <Link href={`/blog/${post.slug}`} className="group flex items-start justify-between gap-2 py-1 text-xs text-neutral-700 hover:text-black transition-colors">
+                                    <span className="group-hover:underline underline-offset-4 decoration-1">{post.title}</span>
+                                    <ArrowUpLeft className="w-3 h-3 mt-0.5 text-neutral-300 group-hover:text-black shrink-0" />
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : <p className="text-[10px] text-neutral-300">مقاله‌ای منتشر نشده</p>}
+                        </section>
                       ))
                     )}
-                  </ul>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* فوتر مینیمال مگامنو */}
-        <div className="bg-neutral-50 border-t border-black px-6 py-2.5 flex items-center justify-between font-mono text-xs">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 text-neutral-700 hover:text-black font-bold transition-colors"
-          >
-            <FolderArchive className="w-3.5 h-3.5" />
-            <span>مشاهده همه مقالات</span>
-            <span className="text-[#c8ff00] bg-black px-1 text-[10px]">ALL</span>
-          </Link>
-
-          <Link
-            href="/store"
-            className="text-neutral-500 hover:text-black text-[11px] font-semibold transition-colors"
-          >
-            محصولات و منابع →
-          </Link>
-        </div>
       </div>
     </div>
   );

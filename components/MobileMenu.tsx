@@ -116,7 +116,7 @@ export default function MobileMenu({
               {/* زیرمنو */}
               <div
                 className={`overflow-hidden transition-all duration-300 ${
-                  blogOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                  blogOpen ? "max-h-[70vh] overflow-y-auto opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
                 <div className="py-4 pr-8 flex flex-col gap-5">
@@ -131,20 +131,24 @@ export default function MobileMenu({
                         <div className="text-[11px] font-bold text-white/40 tracking-widest uppercase mb-3">
                           {cat.name}
                         </div>
-                        <ul className="space-y-2">
+                        <div className="space-y-4">
                           {cat.children.map((child) => (
-                            <li key={child.id}>
-                              <Link
-                                href={`/blog/category/${child.slug}`}
-                                onClick={onClose}
-                                className="flex items-center gap-2 text-sm text-white/70 hover:text-white py-1.5 transition-colors"
-                              >
-                                <span className="w-1 h-1 rounded-full bg-[#c8ff00]/60 shrink-0" />
-                                {child.name}
-                              </Link>
-                            </li>
+                            <section key={child.id}>
+                              <h4 className="text-xs font-bold text-white/50 mb-2">{child.name}</h4>
+                              <ul className="space-y-2 pr-3">
+                                {child.posts.map((post) => (
+                                  <li key={post.id}>
+                                    <Link href={`/blog/${post.slug}`} onClick={onClose} className="flex items-start gap-2 text-sm text-white/70 hover:text-white py-1 transition-colors">
+                                      <span className="w-1 h-1 mt-2 rounded-full bg-[#c8ff00]/60 shrink-0" />
+                                      {post.title}
+                                    </Link>
+                                  </li>
+                                ))}
+                                {child.posts.length === 0 && <li className="text-xs text-white/30">مقاله‌ای منتشر نشده</li>}
+                              </ul>
+                            </section>
                           ))}
-                        </ul>
+                        </div>
                       </div>
                     ))
                   )}
