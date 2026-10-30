@@ -23,6 +23,7 @@ export default function BlogMegaMenu({
 }) {
   return (
     <div
+      id="blog-mega-menu"
       className={`fixed inset-x-0 top-14 md:top-16 px-4 md:px-8 flex justify-center pointer-events-none z-50 transition-all duration-200 ${
         open
           ? "opacity-100 translate-y-0"

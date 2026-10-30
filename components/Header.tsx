@@ -85,13 +85,12 @@ export default function Header() {
             </Link>
 
             {/* بلاگ + مگامنو */}
-            <div
-              className="relative flex items-stretch border-r border-neutral-300"
-              onMouseEnter={() => setBlogMegaOpen(true)}
-              onMouseLeave={() => setBlogMegaOpen(false)}
-            >
+            <div className="relative flex items-stretch border-r border-neutral-300">
               <button
                 type="button"
+                aria-expanded={blogMegaOpen}
+                aria-controls="blog-mega-menu"
+                onClick={() => setBlogMegaOpen((open) => !open)}
                 className="px-5 flex items-center gap-1.5 text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-black hover:text-[#c8ff00] transition-colors cursor-pointer"
               >
                 <span>بلاگ</span>
