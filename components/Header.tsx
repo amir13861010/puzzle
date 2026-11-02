@@ -108,7 +108,11 @@ export default function Header() {
                 <span>بلاگ</span>
                 <span className="text-[9px] opacity-60">▾</span>
               </button>
-              <BlogMegaMenu open={blogMegaOpen} categories={blogCategories} />
+              <BlogMegaMenu
+                open={blogMegaOpen}
+                categories={blogCategories}
+                onNavigate={() => setBlogMegaOpen(false)}
+              />
             </div>
           </nav>
 
