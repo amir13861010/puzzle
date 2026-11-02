@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type CoachingItem = {
   id: string;
   image_url: string;
@@ -81,7 +83,7 @@ export default function CoachingSection({
             </p>
 
             {/* دکمه INFO */}
-            <a
+            <Link
               href="/coaching"
               className="group inline-flex items-center gap-3 mt-10 md:mt-14 border border-white/20 hover:border-[#c8ff00] hover:bg-[#c8ff00] hover:text-black px-6 py-4 transition-all"
             >
@@ -91,7 +93,7 @@ export default function CoachingSection({
               <span className="font-mono text-base group-hover:-translate-x-1 transition-transform">
                 ←
               </span>
-            </a>
+            </Link>
 
             {/* امضا */}
             <div className="mt-12 md:mt-16 pt-6 border-t border-white/10 flex items-center gap-4">
