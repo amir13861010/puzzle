@@ -138,7 +138,7 @@ export default function MobileMenu({
                               <ul className="space-y-2 pr-3">
                                 {child.posts.map((post) => (
                                   <li key={post.id}>
-                                    <Link href={`/blog/${post.slug}`} onClick={onClose} className="flex items-start gap-2 text-sm text-white/70 hover:text-white py-1 transition-colors">
+                                    <Link href={`/${post.slug}`} onClick={onClose} className="flex items-start gap-2 text-sm text-white/70 hover:text-white py-1 transition-colors">
                                       <span className="w-1 h-1 mt-2 rounded-full bg-[#c8ff00]/60 shrink-0" />
                                       {post.title}
                                     </Link>

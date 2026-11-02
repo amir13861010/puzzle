@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MobileMenu from "@/components/MobileMenu";
 import BlogMegaMenu, { type BlogCategory } from "@/components/BlogMegaMenu";
 import { useCart } from "@/lib/cart";
@@ -14,6 +14,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const [blogMegaOpen, setBlogMegaOpen] = useState(false);
   const [blogCategories, setBlogCategories] = useState<BlogCategory[]>([]);
+  const blogMenuRef = useRef<HTMLDivElement>(null);
 
   const totalItems = useCart((s) => s.totalItems);
 
@@ -26,6 +27,17 @@ export default function Header() {
       .then((res) => res.json())
       .then((data) => setBlogCategories(data.categories || []))
       .catch(() => setBlogCategories([]));
+  }, []);
+
+  useEffect(() => {
+    function closeBlogMenuOnOutsideClick(event: PointerEvent) {
+      if (!blogMenuRef.current?.contains(event.target as Node)) {
+        setBlogMegaOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", closeBlogMenuOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeBlogMenuOnOutsideClick);
   }, []);
 
   const itemCount = mounted ? totalItems() : 0;
@@ -85,7 +97,7 @@ export default function Header() {
             </Link>
 
             {/* بلاگ + مگامنو */}
-            <div className="relative flex items-stretch border-r border-neutral-300">
+            <div ref={blogMenuRef} className="relative flex items-stretch border-r border-neutral-300">
               <button
                 type="button"
                 aria-expanded={blogMegaOpen}

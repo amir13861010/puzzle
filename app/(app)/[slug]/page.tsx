@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description,
     keywords: [post.title, category, "مدیریت محصول", "طراحی محصول", "پازل"].filter(Boolean) as string[],
     openGraph: { title, description, type: "article", images: image ? [image] : undefined },
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: `/${slug}` },
   };
 }
 

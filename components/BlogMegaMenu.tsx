@@ -87,7 +87,7 @@ export default function BlogMegaMenu({
                             <ul className="space-y-1">
                               {child.posts.map((post) => (
                                 <li key={post.id}>
-                                  <Link href={`/blog/${post.slug}`} className="group flex items-start justify-between gap-2 py-1 text-xs text-neutral-700 hover:text-black transition-colors">
+                                  <Link href={`/${post.slug}`} className="group flex items-start justify-between gap-2 py-1 text-xs text-neutral-700 hover:text-black transition-colors">
                                     <span className="group-hover:underline underline-offset-4 decoration-1">{post.title}</span>
                                     <ArrowUpLeft className="w-3 h-3 mt-0.5 text-neutral-300 group-hover:text-black shrink-0" />
                                   </Link>
