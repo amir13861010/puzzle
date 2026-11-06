@@ -1,7 +1,7 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCourse, getCourses } from "@/lib/data";
+import { getCourse, getCourses, type Coach } from "@/lib/data";
 import CourseActions from "./CourseActions";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import type { Metadata } from "next";
@@ -242,7 +242,7 @@ export default async function CoursePage({
               <h2 className="text-2xl md:text-4xl font-black" style={{ fontFamily: "var(--font-doran)" }}>اساتید دوره</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {course.instructors?.filter((instructor): instructor is NonNullable<typeof instructor> & { name: string; image_url?: string | null; role?: string | null; description?: string | null } => typeof instructor !== "string").map((instructor, index) => (
+              {course.instructors?.filter((instructor): instructor is Coach => typeof instructor !== "string").map((instructor, index) => (
                 <article key={instructor.id ?? index} className="group overflow-hidden rounded-2xl border border-black/10 bg-[#fafafa] shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-1">
                   <div className="relative aspect-[4/3] overflow-hidden bg-neutral-200">
                     {instructor.image_url ? <img src={instructor.image_url} alt={instructor.alt || instructor.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center font-mono text-xs text-black/30">INSTRUCTOR</div>}
