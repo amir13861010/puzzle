@@ -41,6 +41,8 @@ export type Course = {
   title_en: string;
   teacher_name: string | null;
   coach_id: string | null;
+  instructors?: (Coach | string)[] | null;
+  curriculum?: { id?: string | null; title: string; description?: string | null }[] | null;
   location: string | null;
   topic: string | null;
   price: number;
@@ -227,6 +229,11 @@ async function loadCourse(slug: string): Promise<Course | null> {
     ? {
         ...course,
         image: uploadedImageURL(course.image_media) ?? course.image,
+        instructors: course.instructors?.map((instructor) => {
+          if (typeof instructor === "string") return instructor;
+          const coach = instructor as Coach & { image?: unknown };
+          return { ...coach, image_url: uploadedImageURL(coach.image) ?? coach.image_url };
+        }),
         type: course.type ?? "puzzle",
       }
     : null;

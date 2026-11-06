@@ -298,6 +298,8 @@ export interface Course {
   title_en: string;
   teacher_name?: string | null;
   coach_id?: string | null;
+  instructors?: (string | Coach)[] | null;
+  curriculum?: { id?: string | null; title: string; description?: string | null }[] | null;
   location?: string | null;
   topic?: string | null;
   price: number;
@@ -880,6 +882,8 @@ export interface CoursesSelect<T extends boolean = true> {
   title_en?: T;
   teacher_name?: T;
   coach_id?: T;
+  instructors?: T;
+  curriculum?: T;
   location?: T;
   topic?: T;
   price?: T;

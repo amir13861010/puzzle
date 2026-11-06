@@ -47,6 +47,25 @@ export const Courses: CollectionConfig = {
       type: "text",
     },
     {
+      name: "instructors",
+      type: "relationship",
+      relationTo: "coaches",
+      hasMany: true,
+      label: "اساتید دوره",
+      admin: { description: "اساتید این دوره را از فهرست مربیان انتخاب کن." },
+    },
+    {
+      name: "curriculum",
+      type: "array",
+      label: "سرفصل‌های دوره",
+      labels: { singular: "سرفصل", plural: "سرفصل‌ها" },
+      admin: { description: "سرفصل‌ها را به ترتیب اضافه کن؛ ترتیب ردیف‌ها در صفحه حفظ می‌شود." },
+      fields: [
+        { name: "title", type: "text", label: "عنوان سرفصل", required: true },
+        { name: "description", type: "textarea", label: "توضیحات" },
+      ],
+    },
+    {
       name: "location",
       type: "text",
     },

@@ -204,6 +204,63 @@ export default async function CoursePage({
         </div>
       </section>
 
+      {/* سرفصل‌های دوره */}
+      {course.curriculum && course.curriculum.length > 0 && (
+        <section className="py-16 md:py-24 border-b border-black/10">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div className="flex items-end justify-between gap-6 mb-10 md:mb-14">
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.3em] text-neutral-400 mb-3">[ COURSE CURRICULUM ]</p>
+                <h2 className="text-2xl md:text-4xl font-black" style={{ fontFamily: "var(--font-doran)" }}>سرفصل‌های دوره</h2>
+              </div>
+              <span className="font-mono text-xs text-neutral-400">{course.curriculum.length} مرحله</span>
+            </div>
+            <ol className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {course.curriculum.map((item, index) => (
+                <li key={item.id ?? `${item.title}-${index}`} className="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 md:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+                  <span className="absolute top-5 left-5 font-mono text-4xl font-black text-black/[0.06]">{String(index + 1).padStart(2, "0")}</span>
+                  <div className="flex items-start gap-4">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#c8ff00] font-mono font-black">{String(index + 1).padStart(2, "0")}</span>
+                    <div>
+                      <h3 className="text-lg font-black" style={{ fontFamily: "var(--font-doran)" }}>{item.title}</h3>
+                      {item.description && <p className="mt-2 whitespace-pre-line text-sm leading-8 text-neutral-600" style={{ fontFamily: "var(--font-doran)" }}>{item.description}</p>}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      {/* اساتید دوره */}
+      {((course.instructors?.length ?? 0) > 0 || course.teacher_name) && (
+        <section className="bg-white py-16 md:py-24 border-b border-black/10">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+            <div className="mb-10 md:mb-14">
+              <p className="font-mono text-[10px] tracking-[0.3em] text-neutral-400 mb-3">[ COURSE INSTRUCTORS ]</p>
+              <h2 className="text-2xl md:text-4xl font-black" style={{ fontFamily: "var(--font-doran)" }}>اساتید دوره</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {course.instructors?.filter((instructor): instructor is NonNullable<typeof instructor> & { name: string; image_url?: string | null; role?: string | null; description?: string | null } => typeof instructor !== "string").map((instructor, index) => (
+                <article key={instructor.id ?? index} className="group overflow-hidden rounded-2xl border border-black/10 bg-[#fafafa] shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-1">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-neutral-200">
+                    {instructor.image_url ? <img src={instructor.image_url} alt={instructor.alt || instructor.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center font-mono text-xs text-black/30">INSTRUCTOR</div>}
+                    <span className="absolute bottom-4 right-4 rounded-lg bg-[#c8ff00] px-3 py-1 font-mono text-xs font-black">{String(index + 1).padStart(2, "0")}</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-black" style={{ fontFamily: "var(--font-doran)" }}>{instructor.name}</h3>
+                    {instructor.role && <p className="mt-1 text-sm font-medium text-neutral-500" style={{ fontFamily: "var(--font-doran)" }}>{instructor.role}</p>}
+                    {instructor.description && <p className="mt-4 line-clamp-3 text-sm leading-7 text-neutral-600" style={{ fontFamily: "var(--font-doran)" }}>{instructor.description}</p>}
+                  </div>
+                </article>
+              ))}
+              {(!course.instructors || course.instructors.length === 0) && course.teacher_name && <article className="rounded-2xl border border-black/10 bg-[#fafafa] p-7"><span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#c8ff00] font-mono font-black">01</span><h3 className="text-xl font-black" style={{ fontFamily: "var(--font-doran)" }}>{course.teacher_name}</h3></article>}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* توضیحات کامل */}
       {course.full_description && (
         <section className="py-16 md:py-24 border-b border-black/10">
