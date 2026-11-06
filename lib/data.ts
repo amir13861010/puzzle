@@ -43,6 +43,7 @@ export type Course = {
   coach_id: string | null;
   instructors?: (Coach | string)[] | null;
   curriculum?: { id?: string | null; title: string; description?: string | null }[] | null;
+  custom_sections?: CourseCustomSection[] | null;
   location: string | null;
   topic: string | null;
   price: number;
@@ -54,6 +55,25 @@ export type Course = {
   sort_order: number;
   createdAt: string;
   updatedAt: string;
+};
+
+export type CourseCustomSection = {
+  id?: string | null;
+  title: string;
+  description?: string | null;
+  layout?: "cards" | "numbered" | "checklist" | null;
+  accent?: "lime" | "orange" | "blue" | "dark" | null;
+  items?: CourseCustomSectionItem[] | null;
+};
+
+export type CourseCustomSectionItem = {
+  id?: string | null;
+  title: string;
+  description?: string | null;
+  image?: unknown;
+  image_url?: string | null;
+  link_label?: string | null;
+  link_url?: string | null;
 };
 
 export type Category = {
@@ -224,7 +244,12 @@ async function loadCourse(slug: string): Promise<Course | null> {
     where: { slug: { equals: slug } },
     limit: 1,
   });
-  const course = (result.docs[0] as unknown as (Course & { image_media?: unknown })) ?? null;
+  const course = (result.docs[0] as unknown as (Course & {
+    image_media?: unknown;
+    custom_sections?: (CourseCustomSection & {
+      items?: (CourseCustomSectionItem & { image?: unknown })[] | null;
+    })[] | null;
+  })) ?? null;
   return course
     ? {
         ...course,
@@ -234,6 +259,13 @@ async function loadCourse(slug: string): Promise<Course | null> {
           const coach = instructor as Coach & { image?: unknown };
           return { ...coach, image_url: uploadedImageURL(coach.image) ?? coach.image_url };
         }),
+        custom_sections: course.custom_sections?.map((section) => ({
+          ...section,
+          items: section.items?.map((item) => ({
+            ...item,
+            image_url: uploadedImageURL(item.image) ?? item.image_url,
+          })),
+        })),
         type: course.type ?? "puzzle",
       }
     : null;

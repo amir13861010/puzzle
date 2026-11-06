@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getCourse, getCourses, type Coach } from "@/lib/data";
+import CourseCustomSections from "./CourseCustomSections";
 import CourseActions from "./CourseActions";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import type { Metadata } from "next";
@@ -232,6 +233,8 @@ export default async function CoursePage({
           </div>
         </section>
       )}
+
+      <CourseCustomSections sections={course.custom_sections ?? []} />
 
       {/* اساتید دوره */}
       {((course.instructors?.length ?? 0) > 0 || course.teacher_name) && (

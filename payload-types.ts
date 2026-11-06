@@ -298,8 +298,42 @@ export interface Course {
   title_en: string;
   teacher_name?: string | null;
   coach_id?: string | null;
+  /**
+   * اساتید این دوره را از فهرست مربیان انتخاب کن.
+   */
   instructors?: (string | Coach)[] | null;
-  curriculum?: { id?: string | null; title: string; description?: string | null }[] | null;
+  /**
+   * سرفصل‌ها را به ترتیب اضافه کن؛ ترتیب ردیف‌ها در صفحه حفظ می‌شود.
+   */
+  curriculum?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * هر سکشن می‌تواند تیتر، توضیح، آیتم‌ها، نوع نمایش و رنگ خودش را داشته باشد. ترتیب ردیف‌ها ترتیب نمایش در صفحه است.
+   */
+  custom_sections?:
+    | {
+        title: string;
+        description?: string | null;
+        layout?: ('cards' | 'numbered' | 'checklist') | null;
+        accent?: ('lime' | 'orange' | 'blue' | 'dark') | null;
+        items?:
+          | {
+              title: string;
+              description?: string | null;
+              image?: (string | null) | Media;
+              link_label?: string | null;
+              link_url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   location?: string | null;
   topic?: string | null;
   price: number;
@@ -883,7 +917,32 @@ export interface CoursesSelect<T extends boolean = true> {
   teacher_name?: T;
   coach_id?: T;
   instructors?: T;
-  curriculum?: T;
+  curriculum?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  custom_sections?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        layout?: T;
+        accent?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              link_label?: T;
+              link_url?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   location?: T;
   topic?: T;
   price?: T;

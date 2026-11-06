@@ -66,6 +66,60 @@ export const Courses: CollectionConfig = {
       ],
     },
     {
+      name: "custom_sections",
+      type: "array",
+      label: "سکشن‌های اختصاصی صفحه دوره",
+      labels: { singular: "سکشن", plural: "سکشن‌ها" },
+      admin: {
+        description: "هر سکشن می‌تواند تیتر، توضیح، آیتم‌ها، نوع نمایش و رنگ خودش را داشته باشد. ترتیب ردیف‌ها ترتیب نمایش در صفحه است.",
+      },
+      fields: [
+        { name: "title", type: "text", label: "تیتر سکشن", required: true },
+        { name: "description", type: "textarea", label: "توضیح زیر تیتر" },
+        {
+          name: "layout",
+          type: "select",
+          label: "نحوه نمایش آیتم‌ها",
+          defaultValue: "cards",
+          options: [
+            { label: "کارت‌های شبکه‌ای", value: "cards" },
+            { label: "فهرست شماره‌دار", value: "numbered" },
+            { label: "چک‌لیست", value: "checklist" },
+          ],
+        },
+        {
+          name: "accent",
+          type: "select",
+          label: "رنگ تأکیدی",
+          defaultValue: "lime",
+          options: [
+            { label: "سبز پازل", value: "lime" },
+            { label: "نارنجی", value: "orange" },
+            { label: "آبی", value: "blue" },
+            { label: "مشکی", value: "dark" },
+          ],
+        },
+        {
+          name: "items",
+          type: "array",
+          label: "آیتم‌های سکشن",
+          labels: { singular: "آیتم", plural: "آیتم‌ها" },
+          fields: [
+            { name: "title", type: "text", label: "عنوان", required: true },
+            { name: "description", type: "textarea", label: "توضیحات" },
+            {
+              name: "image",
+              type: "upload",
+              relationTo: "media",
+              label: "تصویر (اختیاری)",
+            },
+            { name: "link_label", type: "text", label: "متن لینک (اختیاری)" },
+            { name: "link_url", type: "text", label: "آدرس لینک (اختیاری)" },
+          ],
+        },
+      ],
+    },
+    {
       name: "location",
       type: "text",
     },
